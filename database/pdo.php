@@ -1,5 +1,5 @@
 <?php
-
+require_once("db.constants.php");
 function connexion()
 {
     require 'db.constants.php';
