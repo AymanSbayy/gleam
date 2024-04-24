@@ -5,6 +5,9 @@ $(document).ready(function () {
   if (alertParam === "activated") {
       showAlert();
   }
+
+
+  
   const buttonPrev = document.getElementById("button-prev");
   const buttonNext = document.getElementById("button-next");
   const track = document.getElementById("track");

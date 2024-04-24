@@ -54,7 +54,11 @@ function activateUser($activation_token) {
     $sql = "UPDATE usuarios SET account_activation_token = NULL WHERE account_activation_token = '$activation_token'";
     $stmt = $conn->prepare($sql);
     $result = $stmt->execute();
-    return $result;
+    if ($result) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -73,4 +77,95 @@ function getMailByToken($activation_token) {
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result["email"];
+}
+
+/**
+ * Inicia sesión de un usuario.
+ *
+ * @param string $email Email del usuario.
+ * @param string $password Contraseña del usuario.
+ * @return boolean true si el usuario se ha logueado correctamente, false si no.
+ */
+
+function loginUser($email, $password) {
+    $conn = connexion();
+    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result) {
+        if (password_verify($password, $result["password"])) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+
+/**
+ * Comprueba si la cuenta de un usuario está verificada.
+ *
+ * @param string $email Email del usuario.
+ * @return boolean true si la cuenta está verificada, false si no.
+ */
+
+function isAccountVerified($email) {
+    $conn = connexion();
+    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result["account_activation_token"] == NULL) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Registrar un usuario con oAuth.
+**/
+
+function registerUserOAuth($nombrecompleto, $email, $foto, $provider, $token) {
+    $conn = connexion();
+    $sql = "INSERT INTO usuarios (nombre, email, foto, provider, provider_id, administrador, fechaRegistro) VALUES ('$nombrecompleto', '$email', '$foto', '$provider', '$token', 0, NOW())";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return true;
+}
+
+
+function getUserInfo($email) {
+    $conn = connexion();
+    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+
+function isAdmin($email) {
+    $conn = connexion();
+    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result["administrador"] == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getUsers() {
+    $conn = connexion();
+    $sql = "SELECT * FROM usuarios";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
 }

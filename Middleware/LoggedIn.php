@@ -7,10 +7,11 @@ if (!isset($_SESSION)) {
 }
 
 // Comprovem si l'usuari te la sessio iniciada
-// en cas contrari, el redirigim a la pagina de login
-// i acabem l'execucio del script
+
 function isLoggedIn() {
-    if (!isset($_SESSION['usuario'])) {
+    if (isset($_SESSION['usuario'])) {
+        return true;
+    } else {
         return false;
     }
 }

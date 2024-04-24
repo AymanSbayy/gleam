@@ -1,14 +1,18 @@
 <?php
 require_once '../Middleware/LoggedIn.php';
+require_once '../oAuth/autentificacion.php';
+require_once '../Model/consultas_usuarios.php';
 
 
-if (isset($_SESSION['usuario'])) {
-    $usuario = $_SESSION['usuario'];
-    echo "<script>alert('Bienvenido $usuario')</script>";
-} else {
+
+if (isLoggedIn() == false) {
     $usuario = null;
-    echo "<script>alert('Bienvenido $usuario')</script>";
+} else {
+    $usuario = $_SESSION['usuario'];
+    $info = getUserInfo($usuario);
 }
+
+$_COOKIE['page'] = $_SERVER['REQUEST_URI'];
 
 ?>
 
@@ -71,16 +75,22 @@ if (isset($_SESSION['usuario'])) {
                     <?php
                     if ($usuario !== null) { ?>
                         <li class="nav-item">
-                            <img src="../public/svg/login.svg" alt="user" class="nav_icon" onmouseover="toggleMenu()">
+                            <img src="<?php echo $info['foto']; ?>" alt="Foto de perfil" class="nav_icon" onclick="toggleMenu()" onmouseover="toggleMenu()" referrerpolicy="no-referrer">
                         </li>
                         <div class="sub-menu-wrap" id="SubMenu" onmouseleave="toggleMenu()">
                             <div class="sub-menu">
                                 <div class="uer-info">
-                                    <img src="../public/svg/login.svg">
+                                    <img src="<?php echo $info['foto']; ?>" alt="Foto de perfil">
                                     <h2>Ayman Sbay</h2>
                                 </div>
                                 <hr>
-
+                                <?php if (isAdmin($usuario)) { ?>
+                                    <a href="admin.php" class="sub-menu-link">
+                                        <img src="../public/svg/login.svg">
+                                        <p>Administración</p>
+                                        <span>></span>
+                                    </a>
+                                <?php } ?>
                                 <a href="perfil.php" class="sub-menu-link">
                                     <img src="../public/svg/login.svg">
                                     <p>Perfil</p>
@@ -145,11 +155,14 @@ if (isset($_SESSION['usuario'])) {
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary btn-lg" id="login" >Iniciar sesión</button>
+                        <button type="button" class="btn btn-primary btn-lg" id="login">Iniciar sesión</button>
                     </div>
                     <hr>
                     <p class="text-center">¿Nuevo por aquí? <a href="#" data-bs-toggle="modal" data-bs-target="#registroModal" data-bs-dismiss="modal">Regístrate</a></p>
                 </form>
+            </div>
+            <div class="d-grid gap-2">
+                <a href="<?php echo $client->createAuthUrl(); ?>" class="btn btn-primary btn-lg">Iniciar sesión con Google</a>
             </div>
         </div>
     </div>

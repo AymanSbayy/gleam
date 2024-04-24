@@ -1,6 +1,4 @@
 <?php
-
-
 require_once("../vendor/autoload.php");
 require_once("../Model/consultas_usuarios.php");
 require_once("../Middleware/LoggedIn.php");
@@ -14,11 +12,12 @@ if (isLoggedIn() == false) {
         if ($result) {
             $_SESSION["usuario"] = $email;
             header("Location: welcome.php?alert=activated");
-            exit;
         } else {
             echo json_encode(["error" => "Ha ocurrido un error al activar la cuenta"]);
         }
     } else {
         header("Location: ../index.php");
     }
+} else {
+    header("Location: welcome.php");
 }

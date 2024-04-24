@@ -17,7 +17,41 @@ function login() {
     url: "login.php",
     data: formData,
     success: function (response) {
-      console.log(response);
+      
+      let errors = JSON.parse(response);
+
+      if (errors.success) {
+        location.reload();
+        
+      } else {
+        let fields = document.querySelectorAll(".is-invalid");
+        fields.forEach((field) => {
+          field.classList.remove("is-invalid");
+        });
+
+        let feedbacks = document.querySelectorAll(".invalid-feedback");
+        feedbacks.forEach((feedback) => {
+          feedback.remove();
+        });
+
+        if (errors.email) {
+          let emailField = document.getElementById("email");
+          emailField.classList.add("is-invalid");
+          let errorMensaje = document.createElement("div");
+          errorMensaje.classList.add("invalid-feedback");
+          errorMensaje.innerText = errors.email;
+          emailField.parentNode.appendChild(errorMensaje);
+        }
+
+        if (errors.password) {
+          let passwordField = document.getElementById("password");
+          passwordField.classList.add("is-invalid");
+          let errorMensaje = document.createElement("div");
+          errorMensaje.classList.add("invalid-feedback");
+          errorMensaje.innerText = errors.password;
+          passwordField.parentNode.appendChild(errorMensaje);
+        }
+      }
     },
   });
 }
@@ -38,7 +72,6 @@ function register() {
     url: "registro.php",
     data: formData,
     success: function (response) {
-      console.log(response);
       let errors = JSON.parse(response);
 
       if (errors.success) {
@@ -56,7 +89,8 @@ function register() {
         });
 
         if (errors.nombrecompleto) {
-          let nombrecompletoField = document.getElementById("nombrecompletoreg");
+          let nombrecompletoField =
+            document.getElementById("nombrecompletoreg");
           nombrecompletoField.classList.add("is-invalid");
           let errorMensaje = document.createElement("div");
           errorMensaje.classList.add("invalid-feedback");

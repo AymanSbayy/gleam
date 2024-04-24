@@ -26,7 +26,8 @@
 
 <body>
     <?php include("Components/navbar.php"); ?>
-
+    <?php include("Components/email_verified.php"); ?>
+    
     <script>
         function filtrarProductos(categoria) {
             $.ajax({
