@@ -37,11 +37,12 @@
                     categoria: categoria
                 },
                 success: function(response) {
+                    console.log(response);
                     $('#productos-container').empty();
                     $.each(response, function(index, producto) {
                         var html = '<div class="col-12 col-md-6 col-lg-4 mt-5">';
                         html += '<div class="card card-personal2">';
-                        html += '<img src="../public/img_productos/' + producto.imagen + '" class="card-img" alt="'+producto.nombre+'">';
+                        html += '<img src="data:image/jpg;base64,' + producto.imagen + '" class="card-img" alt="' + producto.nombre + '">';
                         html += '<div class="intro">';
                         html += '<h5 class="">' + producto.nombre + '</h5>';
                         html += '<p class="">' + producto.precio + ' €</p>';
@@ -75,18 +76,18 @@
                         <li class="list_item">
                             <div class="list_button list_button-click">
                                 <img src="../public/svg/home.svg" alt="" class="list_img">
-                                <a onclick="filtrarProductos('hogar_jardineria')" class="nav_link">Hogar y jardinería</a>
+                                <a onclick="filtrarProductos('Hogar y jardineria')" class="nav_link">Hogar y jardinería</a>
                                 <img src="../public/svg/arrow.svg" class="list_arrow">
                             </div>
                             <ul class="list_show">
                                 <li class="list_inside">
-                                    <a onclick="filtrarProductos('interiores')" class="nav_link nav_link--inside">Decoración de Interiores</a>
+                                    <a onclick="filtrarProductos('Interiores')" class="nav_link nav_link--inside">Decoración de Interiores</a>
                                 </li>
                                 <li class="list_inside">
-                                    <a onclick="filtrarProductos('dfloral')" class="nav_link nav_link--inside">Decoración Floral</a>
+                                    <a onclick="filtrarProductos('Decoracion floral')" class="nav_link nav_link--inside">Decoración Floral</a>
                                 </li>
                                 <li class="list_inside">
-                                    <a onclick="filtrarProductos('jardineria')" class="nav_link nav_link--inside">Herramientas de Jardinería</a>
+                                    <a onclick="filtrarProductos('Jardineria')" class="nav_link nav_link--inside">Herramientas de Jardinería</a>
                                 </li>
                             </ul>
 
@@ -95,18 +96,18 @@
                         <li class="list_item">
                             <div class="list_button list_button-click">
                                 <img src="../public/svg/tecno.svg" alt="" class="list_img">
-                                <a onclick="filtrarProductos('electrodomesticos')" class="nav_link">Electrodomésticos</a>
+                                <a onclick="filtrarProductos('Electrodomesticos')" class="nav_link">Electrodomésticos</a>
                                 <img src="../public/svg/arrow.svg" class="list_arrow">
                             </div>
                             <ul class="list_show">
                                 <li class="list_inside">
-                                    <a onclick="filtrarProductos('cocina')" class="nav_link nav_link--inside">Electrodomésticos de Cocina</a>
+                                    <a onclick="filtrarProductos('Cocina')" class="nav_link nav_link--inside">Electrodomésticos de Cocina</a>
                                 </li>
                                 <li class="list_inside">
-                                    <a onclick="filtrarProductos('ehogar')" class="nav_link nav_link--inside">Electrodomésticos para el Hogar</a>
+                                    <a onclick="filtrarProductos('Hogar')" class="nav_link nav_link--inside">Electrodomésticos para el Hogar</a>
                                 </li>
                                 <li class="list_inside">
-                                    <a onclick="filtrarProductos('eentret')" class="nav_link nav_link--inside">Electrónica de Entretenimiento</a>
+                                    <a onclick="filtrarProductos('Entretenimiento')" class="nav_link nav_link--inside">Electrónica de Entretenimiento</a>
                                 </li>
                             </ul>
                         </li>
@@ -114,18 +115,18 @@
                         <li class="list_item">
                             <div class="list_button list_button-click">
                                 <img src="../public/svg/sports.svg" alt="" class="list_img">
-                                <a onclick="filtrarProductos('deportes')" class="nav_link">Deportes</a>
+                                <a onclick="filtrarProductos('Deportes')" class="nav_link">Deportes</a>
                                 <img src="../public/svg/arrow.svg" class="list_arrow">
                             </div>
                             <ul class="list_show">
                                 <li class="list_inside">
-                                    <a onclick="filtrarProductos('fitness')" class="nav_link nav_link--inside">Equipamiento para Fitness</a>
+                                    <a onclick="filtrarProductos('Fitness')" class="nav_link nav_link--inside">Equipamiento para Fitness</a>
                                 </li>
                                 <li class="list_inside">
-                                    <a onclick="filtrarProductos('ciclismo')" class="nav_link nav_link--inside">Accesorios para Ciclismo</a>
+                                    <a onclick="filtrarProductos('Ciclismo')" class="nav_link nav_link--inside">Accesorios para Ciclismo</a>
                                 </li>
                                 <li class="list_inside">
-                                    <a onclick="filtrarProductos('actuaticos')" class="nav_link nav_link--inside">Equipamiento para Deportes Acuáticos</a>
+                                    <a onclick="filtrarProductos('Acuaticos')" class="nav_link nav_link--inside">Equipamiento para Deportes Acuáticos</a>
                                 </li>
                             </ul>
                         </li>
@@ -144,7 +145,7 @@
                     foreach ($productos as $producto) : ?>
                         <div class="col-12 col-md-6 col-lg-4 mt-5">
                             <div class="card card card-personal2">
-                                <img src="../public/img_productos/<?php echo $producto['imagen']; ?>" class="card-img" alt="...">
+                                <img src="data:image/jpg;base64,<?php echo $producto['imagen']; ?>" class="card-img" alt="<?php echo $producto['nombre']; ?>">
                                 <div class="intro">
                                     <h5 class=""><?php echo $producto['nombre']; ?></h5>
                                     <p class="">$<?php echo $producto['precio']; ?></p>

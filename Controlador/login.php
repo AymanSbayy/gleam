@@ -1,7 +1,7 @@
 <?php
 
 require_once("../vendor/autoload.php");
-
+require_once("validations.php");
 require_once("../Model/consultas_usuarios.php");
 require_once("../Middleware/LoggedIn.php");
 
@@ -20,8 +20,15 @@ if (isLoggedIn() == false) {
             $result = loginUser($email, $password);
             if ($result) {
                 if (isAccountVerified($email)) {
-                    $_SESSION["usuario"] = $email;
-                    echo json_encode(["success" => "Has iniciado sesión correctamente"]);
+                    if (userIsBlocked($email) == 1) {
+                        $errors = [
+                            "password" => "El usuario está bloqueado",
+                        ];
+                        echo json_encode($errors);
+                    } else {
+                        $_SESSION["usuario"] = $email;
+                        echo json_encode(["success" => "Has iniciado sesión correctamente"]);
+                    }
                 } else {
                     $errors = [
                         "password" => "La cuenta no ha sido verificada",

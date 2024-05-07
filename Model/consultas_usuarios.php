@@ -169,3 +169,47 @@ function getUsers() {
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
 }
+
+function deleteUser($idUsuario) {
+    $conn = connexion();
+    $sql = "DELETE FROM usuarios WHERE idUsuario = $idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function bloquearUser($idUsuario) {
+    $conn = connexion();
+    $sql = "UPDATE usuarios SET bloqueado = 1 WHERE idUsuario = $idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function desbloquearUser($idUsuario) {
+    $conn = connexion();
+    $sql = "UPDATE usuarios SET bloqueado = 0 WHERE idUsuario = $idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function quitarAdmin($idUsuario) {
+    $conn = connexion();
+    $sql = "UPDATE usuarios SET administrador = 0 WHERE idUsuario = $idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function hacerAdmin($idUsuario) {
+    $conn = connexion();
+    $sql = "UPDATE usuarios SET administrador = 1 WHERE idUsuario = $idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function getUserByEmail($email) {
+    $conn = connexion();
+    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result;
+}

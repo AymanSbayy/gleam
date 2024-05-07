@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="../public/css/admin.css">
     <script src="../public/js/Admin/script.js" defer></script>
+    <script src="../public/js/Admin/users.js" defer></script>
 
 </head>
 
@@ -38,41 +40,46 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($usuarios as $usuario) : ?>
+                                            <?php foreach ($usuariosPaginados as $usuario) : ?>
                                                 <tr>
                                                     <td><?php echo $usuario['idUsuario'] ?></td>
                                                     <td><?php echo $usuario['nombre'] ?></td>
                                                     <td><?php echo $usuario['email'] ?></td>
                                                     <td><?php echo $usuario['administrador'] == 1 ? 'Administrador' : 'Usuario' ?></td>
                                                     <td>
-                                                        <a href="../Controlador/eliminar_usuario.php?id=<?php echo $usuario['idUsuario'] ?>" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
-                                                        <a href="../Controlador/bloquear_usuario.php?id=<?php echo $usuario['idUsuario'] ?>" class="btn btn-secondary"><i class="lni lni-lock"></i></a>
-                                                        <a href="../Controlador/hacer_admin.php?id=<?php echo $usuario['idUsuario'] ?>" class="btn btn-success"><i class="lni lni-user"></i></a>
-                                                        <a href="../Controlador/quitar_admin.php?id=<?php echo $usuario['idUsuario'] ?>" class="btn btn-info"><i class="lni lni-user"></i></a>
+                                                        <button onclick="eliminarUsuario(<?php echo $usuario['idUsuario'] ?>)" class="btn btn-danger"><i class="lni lni-trash-can"></i></button>
+                                                        <?php if ($usuario['bloqueado'] == 1) : ?>
+                                                            <button onclick="desbloquearUsuario(<?php echo $usuario['idUsuario'] ?>)" class="btn btn-warning"><i class="lni lni-unlock"></i></button>
+                                                        <?php else : ?>
+                                                            <button onclick="bloquearUsuario(<?php echo $usuario['idUsuario'] ?>)" class="btn btn-secondary"><i class="lni lni-lock"></i></button>
+                                                        <?php endif; ?>
+                                                        <?php if ($usuario['administrador'] == 1) : ?>
+                                                            <button onclick="quitarAdmin(<?php echo $usuario['idUsuario'] ?>)" class="btn btn-info"><i class="lni lni-user"></i></button>
+                                                        <?php else : ?>
+                                                            <button onclick="hacerAdmin(<?php echo $usuario['idUsuario'] ?>)" class="btn btn-success"><i class="lni lni-user"></i></button>
+                                                        <?php endif; ?>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
-                                </div>
-                                <div id="pagination" class="d-flex justify-content-center mt-3">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination
-                                        <?php echo $pagina <= 1 ? 'disabled' : '' ?>">
-                                            <a class="page-link" href="?pagina=<?php echo $pagina - 1; ?>">Anterior</a>
-                                            </li>
-                                            <?php for ($i = 0; $i < $totalPaginas; $i++) : ?>
-                                                <li class="page-item
-                                            <?php echo $pagina == $i + 1 ? 'active' : '' ?>">
-                                                    <a class="page-link" href="?pagina=<?php echo $i + 1; ?>"><?php echo $i + 1; ?></a>
+
+                                    <div id="pagination" class="d-flex justify-content-center mt-3">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination <?php echo $pagina <= 1 ? 'disabled' : '' ?>">
+                                                <a class="page-link" href="?pagina=<?php echo $pagina - 1; ?>">Anterior</a>
                                                 </li>
-                                            <?php endfor; ?>
-                                            <li class="page-item <?php echo $pagina >= $totalPaginas ? 'disabled' : '' ?>">
-                                                <a class="page-link" href="?pagina=<?php echo $pagina + 1; ?>">Siguiente</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
+                                                <?php for ($i = 0; $i < $totalPaginas; $i++) : ?>
+                                                    <li class="page-item <?php echo $pagina == $i + 1 ? 'active' : '' ?>">
+                                                        <a class="page-link" href="?pagina=<?php echo $i + 1; ?>"><?php echo $i + 1; ?></a>
+                                                    </li>
+                                                <?php endfor; ?>
+                                                <li class="page-item <?php echo $pagina >= $totalPaginas ? 'disabled' : '' ?>">
+                                                    <a class="page-link" href="?pagina=<?php echo $pagina + 1; ?>">Siguiente</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
                             </div>
                             <div class="col-12 mt-4">
                                 <div class="tab">

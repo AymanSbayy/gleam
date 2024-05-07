@@ -1,6 +1,7 @@
 <?php
 
 require_once("configuracion.php");
+require_once("../Controlador/validations.php");
 
 if (isset($_GET['code'])) {
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
@@ -12,8 +13,16 @@ if (isset($_GET['code'])) {
     $provider = "google";
     $foto = $user->picture;
 
-    if (!emailExists($email)) {
-        registerUserOAuth($nombre, $email, $foto, $provider, $token["access_token"]);
+    if (!userIsBlocked($email) == 1) {
+        header("Location: ../Controlador/welcome.php");
+        if (!emailExists($email)) {
+
+            registerUserOAuth($nombre, $email, $foto, $provider, $token["access_token"]);
+            $_SESSION['usuario'] = $email;
+        } else {
+            $_SESSION['usuario'] = $email;
+        }
+    } else {
+        header("Location: ../Controlador/welcome.php");
     }
-    $_SESSION['usuario'] = $email;
 }

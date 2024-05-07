@@ -17,9 +17,9 @@ function login() {
     url: "login.php",
     data: formData,
     success: function (response) {
-      
+      console.log(response);
       let errors = JSON.parse(response);
-
+      
       if (errors.success) {
         location.reload();
         

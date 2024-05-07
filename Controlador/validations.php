@@ -1,4 +1,12 @@
 <?php
+
+function userIsBlocked($email) {
+    require_once("../Model/consultas_usuarios.php");
+    $user = getUserByEmail($email);
+    return $user['bloqueado'];
+}
+
+
 // Validate nombrecompleto
 function validateNombreCompleto($nombrecompleto) {
     //Comprobar que haya obligatoriamente tambien apellidos

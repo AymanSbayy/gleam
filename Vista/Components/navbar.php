@@ -54,9 +54,9 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
                                 TIENDA
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownTienda">
-                                <li><a class="dropdown-item" href="shop.php?categoria=hogar_jardineria">Hogar y jardinería</a></li>
-                                <li><a class="dropdown-item" href="shop.php?categoria=electrodomesticos">Electrodomésticos</a></li>
-                                <li><a class="dropdown-item" href="shop.php?categoria=deportes">Deportes</a></li>
+                                <li><a class="dropdown-item" href="shop.php?categoria=Hogar y jardinería">Hogar y jardinería</a></li>
+                                <li><a class="dropdown-item" href="shop.php?categoria=Electrodomésticos">Electrodomésticos</a></li>
+                                <li><a class="dropdown-item" href="shop.php?categoria=Deportes">Deportes</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
