@@ -60,7 +60,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="imagen" class="form-label">Imagen del Producto</label>
-                        <input type="file" class="form-control" id="imagen" name="imagen" required>
+                        <input type="text" class="form-control" id="imagen" name="imagen" placeholder="Ingrese el enlace de la imagen" required>
                     </div>
                     <div class="mb-3">
                         <label for="total" class="form-label" disabled>Total a Pagar</label>

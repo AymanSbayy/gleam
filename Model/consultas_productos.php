@@ -199,29 +199,6 @@ function getStockByProducto($producto)
     return $stock;
 }
 
-function importarProducto($codigo_barras, $nombre, $precio, $activo)
-{
-    $conn = connexion();
-    $sql = "INSERT INTO productos (codigo_barras, nombre, precio, activo, idCategoria, idSubcategoria) VALUES (:codigo_barras, :nombre, :precio, :activo, 1, 1)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':codigo_barras', $codigo_barras);
-    $stmt->bindParam(':nombre', $nombre);
-    $stmt->bindParam(':precio', $precio);
-    $stmt->bindParam(':activo', $activo);
-    $stmt->execute();
-    return true;
-}
-
-function getProductosNoActivos()
-{
-    $conn = connexion();
-    $sql = "SELECT * FROM productos WHERE activo = 0";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $productos;
-}
-
 function eliminarProducto($producto)
 {
     $conn = connexion();
@@ -231,3 +208,19 @@ function eliminarProducto($producto)
     $stmt->execute();
     return true;
 }
+
+function editarProducto($producto, $nombre, $precio, $descripcion, $imagen, $descuento)
+{
+    $conn = connexion();
+    $sql = "UPDATE productos SET nombre = :nombre, precio = :precio, descripcion = :descripcion, imagen = :imagen, descuento = :descuento WHERE idProducto = :idProducto";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':nombre', $nombre);
+    $stmt->bindParam(':precio', $precio);
+    $stmt->bindParam(':descripcion', $descripcion);
+    $stmt->bindParam(':imagen', $imagen);
+    $stmt->bindParam(':descuento', $descuento);
+    $stmt->bindParam(':idProducto', $producto);
+    $stmt->execute();
+    return true;
+}
+

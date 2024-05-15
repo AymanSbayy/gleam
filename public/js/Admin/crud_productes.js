@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
   $("#importar").click(function () {
     let data = new FormData();
     data.append("file", $("#file").prop("files")[0]);
@@ -32,7 +31,57 @@ $(document).ready(function () {
     });
   });
 
+  $("#editarProducto").click(function () {
+    let data = new FormData();
+    data.append("codigo_barras", $("#edit_codigo_barras").val());
+    data.append("nombre", $("#edit_nombre").val());
+    data.append("precio", $("#edit_precio").val());
+    data.append("descripcion", $("#edit_descripcion").val());
+    data.append("imagen", $("#editar_imagen").val());
+    data.append("descuento", $("#edit_descuento").val());
+    data.append("action", "editar_producto");
 
+    $.ajax({
+      type: "POST",
+      url: "crud_producto.php",
+      data: data,
+      contentType: false,
+      processData: false,
+      success: function (data) {
+        console.log(data);
+        data = JSON.parse(data);
+        if (
+          data === "El código de barras debe ser un string de 13 caracteres"
+        ) {
+          $.bootstrapGrowl(data, { type: "danger", width: "1000px" });
+        } else if (
+          data === "El nombre del producto debe tener al menos 3 caracteres"
+        ) {
+          $.bootstrapGrowl(data, { type: "danger", width: "1000px" });
+        } else if (
+          data ===
+          "La descripción del producto debe tener al menos 10 caracteres"
+        ) {
+          $.bootstrapGrowl(data, { type: "danger", width: "1000px" });
+        } else if (data === "El precio debe ser un número válido") {
+          $.bootstrapGrowl(data, { type: "danger", width: "1000px" });
+        } else if (
+          data ===
+          "La imagen no puede estar vacía"
+        ) {
+          $.bootstrapGrowl(data, { type: "danger", width: "1000px" });
+        } else if (data === "Producto editado correctamente") {
+          $.bootstrapGrowl(data, { type: "success", width: "1000px" });
+          $("#editarModal").modal("hide");
+        } else {
+          $.bootstrapGrowl("Error al editar el producto", {
+            type: "danger",
+            width: "1000px",
+          });
+        }
+      },
+    });
+  });
 
   $("#comprarexist").click(function () {
     let codigo_barras = $("#codigo_barras2").val();
@@ -44,15 +93,25 @@ $(document).ready(function () {
     $.ajax({
       type: "POST",
       url: "crud_producto.php",
-      data: { codigo_barras: codigo_barras, unidades: unidades, action: "comprar_producto", total: total },
+      data: {
+        codigo_barras: codigo_barras,
+        unidades: unidades,
+        action: "comprar_producto",
+        total: total,
+      },
       success: function (data) {
         try {
           console.log(data);
           data = JSON.parse(data);
-          if (data === "El producto seleccionado, aún no esta disponible por falta de información") {
+          if (
+            data ===
+            "El producto seleccionado, aún no esta disponible por falta de información"
+          ) {
             $.bootstrapGrowl(data, { type: "danger" });
           } else {
-            $.bootstrapGrowl("Producto comprado correctamente", { type: "success" });
+            $.bootstrapGrowl("Producto comprado correctamente", {
+              type: "success",
+            });
             $("#comprarExist").modal("hide");
           }
         } catch (error) {
@@ -61,8 +120,6 @@ $(document).ready(function () {
       },
     });
   });
-
-
 
   $("#buscar_prod").click(function () {
     let codigo_barras = $("#codigo_barras2").val();
@@ -110,7 +167,7 @@ $(document).ready(function () {
             </tr>
             <tr>
               <th>Imagen</th>
-              <td><img src="data:image/png;base64,${data.producto.imagen}" alt="Imagen del producto" style="width: 100px; height: 100px;"></td>
+              <td><img src="${data.producto.imagen}" alt="Imagen del producto" style="width: 100px; height: 100px;"></td>
             </tr>
             <tr>
               <th>Unidades</th>
@@ -137,7 +194,7 @@ $(document).ready(function () {
     data.append("descripcion", $("#descripcion").val());
     data.append("categoria", $("#categoria").val());
     data.append("subcategoria", $("#subcategoria").val());
-    data.append("imagen", $("#imagen").prop("files")[0]);
+    data.append("imagen", $("#imagen").val());
     data.append("codigo_barras", $("#codigo_barras").val());
     data.append("unidades", $("#unidades").val());
     data.append("descuento", $("#descuento").val());
@@ -276,7 +333,7 @@ function calcularTotal2() {
   let precio = parseFloat(numeros);
   let unidades = parseInt($("#unidades2").val());
   let descuento;
-console.log(precio);
+  console.log(precio);
   if (unidades >= 0 && unidades < 10) {
     descuento = 0;
   } else if (unidades >= 10 && unidades < 50) {

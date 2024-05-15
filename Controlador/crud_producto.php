@@ -15,15 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return;
         }
 
-        $producto = getProductoByCodigoBarras($codigo_barras);
+        $productos = getProductoByCodigoBarras($codigo_barras);
 
-        if ($producto) {
-            $categoria = getCategoriaById($producto['idCategoria']);
-            $subcategoria = getSubcategoriaById($producto['idSubcategoria']);
-            $stock = getStockByProducto($producto['idProducto']);
+        if ($productos) {
+            $categoria = getCategoriaById($productos['idCategoria']);
+            $subcategoria = getSubcategoriaById($productos['idSubcategoria']);
+            $stock = getStockByProducto($productos['idProducto']);
             $stock = $stock['cantidadDisponible'];
             $response = array(
-                'producto' => $producto,
+                'producto' => $productos,
                 'categoria' => $categoria,
                 'subcategoria' => $subcategoria,
                 'stock' => $stock
@@ -39,17 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return;
         }
 
-        if (!isset($_FILES['imagen'])) {
-            echo json_encode("Tienes que subir una imagen");
-            return;
-        }
-
         $nombre = $_POST['nombre'];
         $precio = $_POST['precio'];
         $descripcion = $_POST['descripcion'];
         $categoria = $_POST['categoria'];
         $subcategoria = $_POST['subcategoria'];
-        $imagen = $_FILES['imagen'];
+        $imagen = $_POST['imagen'];
         $codigo_barras = $_POST['codigo_barras'];
         $unidades = $_POST['unidades'];
         $descuento = $_POST['descuento'];
@@ -91,15 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo json_encode("El precio debe ser un número válido");
             return;
         }
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        $fileExtension = strtolower(pathinfo($imagen['name'], PATHINFO_EXTENSION));
-        if (!in_array($fileExtension, $allowedExtensions)) {
-            echo json_encode("La imagen debe ser un archivo de imagen válido (jpg, jpeg, png, gif)");
-            return;
-        }
 
-        $imagen = file_get_contents($imagen['tmp_name']);
-        $imagen = base64_encode($imagen);
         if (existeProducto2($codigo_barras)) {
             echo json_encode("Este producto ya consta en la base de datos, prueba a comprar más unidades");
             return;
@@ -107,18 +94,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $añadir = añadirProducto($nombre, $precio, $descripcion, $categoria, $subcategoria, $imagen, $codigo_barras, $unidades, $descuento, $aumento_iva);
         }
 
-        $producto = getProductoByCodigoBarras($codigo_barras);
-        $producto = $producto['idProducto'];
+        $productos = getProductoByCodigoBarras($codigo_barras);
+        $productos = $productos['idProducto'];
 
-        if (existeProducto($producto)) {
-            $stock = añadirStock($producto, $unidades);
+        if (existeProducto($productos)) {
+            $stock = añadirStock($productos, $unidades);
             echo "hola";
         } else {
-            $stock = insertarProducto($producto, $unidades);
-            echo "pepe";
+            $stock = insertarProducto($productos, $unidades);
         }
 
-        $compra = insertarCompra($producto, $unidades, $total);
+        $compra = insertarCompra($productos, $unidades, $total);
 
 
         if ($añadir) {
@@ -130,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 "nombre" => $nombre,
                 "precio" => $precio,
                 "estado" => $estado,
-                "producto" => $producto
+                "producto" => $productos
             ));
         } else {
             echo json_encode("Hubo un error al añadir el producto");
@@ -150,16 +136,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return;
         }
 
-        $producto = getProductoByCodigoBarras($codigo_barras);
-        $producto = $producto['idProducto'];
+        $productos = getProductoByCodigoBarras($codigo_barras);
+        $productos = $productos['idProducto'];
 
-        if (existeProducto($producto)) {
-            $stock = añadirStock($producto, $unidades);
+        if (existeProducto($productos)) {
+            $stock = añadirStock($productos, $unidades);
         } else {
-            $stock = insertarProducto($producto, $unidades);
+            $stock = insertarProducto($productos, $unidades);
         }
 
-        $compra = insertarCompra($producto, $unidades, $total);
+        $compra = insertarCompra($productos, $unidades, $total);
         echo json_encode("Producto comprado correctamente");
     } else if (isset($_POST['action']) && $_POST['action'] === 'importar_productos') {
         if (empty($_FILES['file'])) {
@@ -192,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 continue;
             }
             $line = explode("|", $line);
-            $producto = array(
+            $productos = array(
                 'codigo_barras' => $line[0],
                 'nombre' => $line[1],
                 'precio' => $line[2],
@@ -202,21 +188,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'subcategoria' => $line[6],
                 'url_imagen' => $line[7]
             );
-            array_push($productos, $producto);
-            if (!verificarCategoria($producto['categoria']) || !verificarSubcategoria($producto['subcategoria'])) {
-                echo json_encode("Error: La categoría o subcategoría en el producto " . $producto['nombre'] . " no es válida.");
+            array_push($productos, $productos);
+            if (!verificarCategoria($productos['categoria']) || !verificarSubcategoria($productos['subcategoria'])) {
+                echo json_encode("Error: La categoría o subcategoría en el producto " . $productos['nombre'] . " no es válida.");
                 return;
             }
         }
-        foreach ($productos as $producto) {
-            $nombre = $producto['nombre'];
-            $precio = $producto['precio'];
-            $descripcion = $producto['descripcion'];
-            $categoria = $producto['categoria'];
-            $subcategoria = $producto['subcategoria'];
-            $url_imagen = $producto['url_imagen'];
-            $codigo_barras = $producto['codigo_barras'];
-            $cantidad = $producto['cantidad'];
+        foreach ($productos as $productos) {
+            $nombre = $productos['nombre'];
+            $precio = $productos['precio'];
+            $descripcion = $productos['descripcion'];
+            $categoria = $productos['categoria'];
+            $subcategoria = $productos['subcategoria'];
+            $url_imagen = $productos['url_imagen'];
+            $codigo_barras = $productos['codigo_barras'];
+            $cantidad = $productos['cantidad'];
             $descuento = 0;
             $aumento_iva = 0;
             $total = 0;
@@ -234,47 +220,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $total = $precio + ($precio * $aumento_iva / 100) - ($precio * $descuento / 100);
 
             if (existeProducto2($codigo_barras)) {
-                $producto = getProductoByCodigoBarras($codigo_barras);
-                $producto = $producto['idProducto'];
-                if (existeProducto($producto)) {
-                    $stock = añadirStock($producto, $cantidad);
+                $productos = getProductoByCodigoBarras($codigo_barras);
+                $productos = $productos['idProducto'];
+                if (existeProducto($productos)) {
+                    $stock = añadirStock($productos, $cantidad);
                 } else {
-                    $stock = insertarProducto($producto, $cantidad);
+                    $stock = insertarProducto($productos, $cantidad);
                 }
-                $compra = insertarCompra($producto, $cantidad, $total);
+                $compra = insertarCompra($productos, $cantidad, $total);
             } else {
-                $imagen_url = "https://www.tophosteleria.com/764-large_default/liquadora-trituradora-de-vas-tv-500.jpg";
-                $imagen_info = @getimagesize($imagen_url);
-
-                if ($imagen_info === false) {
-                    echo json_encode("Error: La URL proporcionada en el producto " . $nombre . " no apunta a una imagen válida.");
-                    return;
-                }
-
-                $imagen = @file_get_contents($imagen_url);
-                if ($imagen === false) {
-                    echo json_encode("Error: No se pudo descargar la imagen desde la URL proporcionada en el producto " . $nombre);
-                    return;
-                }
-
-                $imagen_base64 = base64_encode($imagen);
                 if (existeProducto2($codigo_barras)) {
                     echo json_encode("Este producto ya consta en la base de datos, prueba a comprar más unidades");
                     return;
                 } else {
-                    $añadir = añadirProducto($nombre, $precio, $descripcion, $categoria, $subcategoria, $imagen, $codigo_barras, $cantidad, $descuento, $aumento_iva);
+                    $añadir = añadirProducto($nombre, $precio, $descripcion, $categoria, $subcategoria, $url_imagen, $codigo_barras, $cantidad, $descuento, $aumento_iva);
                 }
 
-                $producto = getProductoByCodigoBarras($codigo_barras);
-                $producto = $producto['idProducto'];
+                $productos = getProductoByCodigoBarras($codigo_barras);
+                $productos = $productos['idProducto'];
 
-                if (existeProducto($producto)) {
-                    $stock = añadirStock($producto, $cantidad);
+                if (existeProducto($productos)) {
+                    $stock = añadirStock($productos, $cantidad);
                 } else {
-                    $stock = insertarProducto($producto, $cantidad);
+                    $stock = insertarProducto($productos, $cantidad);
                 }
 
-                $compra = insertarCompra($producto, $cantidad, $total);
+                $compra = insertarCompra($productos, $cantidad, $total);
             }
         }
         echo json_encode("Los productos se han importado correctamente");
@@ -291,19 +262,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } else if (isset($_POST['accion']) && $_POST['accion'] === 'info_producto') {
         $id = $_POST['id'];
-        $producto = getProductoByCodigoBarras($id);
-        $categoria = getCategoriaById($producto['idCategoria']);
-        $subcategoria = getSubcategoriaById($producto['idSubcategoria']);
+        $productos = getProductoByCodigoBarras($id);
+        $categoria = getCategoriaById($productos['idCategoria']);
+        $subcategoria = getSubcategoriaById($productos['idSubcategoria']);
         $categorias = getCategorias();
         $subcategorias = getSubcategorias();
         $response = array(
-            'producto' => $producto,
+            'producto' => $productos,
             'categoria' => $categoria,
             'subcategoria' => $subcategoria,
             'categorias' => $categorias,
             'subcategorias' => $subcategorias
         );
         echo json_encode($response);
+    } else if (isset($_POST['action']) && $_POST['action'] === 'editar_producto') {
+        $codigo_barras = $_POST['codigo_barras'];
+        $nombre = $_POST['nombre'];
+        $precio = $_POST['precio'];
+        $descripcion = $_POST['descripcion'];
+        $imagen = $_POST['imagen'];
+        $descuento = $_POST['descuento'];
+
+        if (strlen($codigo_barras) !== 13) {
+            echo json_encode("El código de barras debe ser un string de 13 caracteres");
+            return;
+        }
+
+        if (strlen($nombre) < 3) {
+            echo json_encode("El nombre del producto debe tener al menos 3 caracteres");
+            return;
+        }
+
+        if (strlen($descripcion) < 10) {
+            echo json_encode("La descripción del producto debe tener al menos 10 caracteres");
+            return;
+        }
+
+        if (!is_numeric($precio)) {
+            echo json_encode("El precio debe ser un número válido");
+            return;
+        }
+
+        if (empty($imagen)) {
+            echo json_encode("La imagen no puede estar vacía");
+            return;
+        }
+
+        if (!is_numeric($descuento)) {
+            echo json_encode("El descuento debe ser un número válido");
+            return;
+        }
+
+        $productos = getProductoByCodigoBarras($codigo_barras);
+        $productos = $productos['idProducto'];
+
+        $editar = editarProducto($productos, $nombre, $precio, $descripcion, $imagen, $descuento);
+
+        if ($editar) {
+            echo json_encode("Producto editado correctamente");
+        } else {
+            echo json_encode("Error al editar el producto");
+        }
     }
 }
 

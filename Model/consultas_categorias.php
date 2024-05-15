@@ -88,3 +88,13 @@ function getCategorias(){
     return $categorias;
 }
 
+function getProductosBySubcategoria($idSubcategoria){
+    $conn = connexion();
+    $sql = "SELECT * FROM productos WHERE idSubcategoria = :idSubcategoria";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':idSubcategoria', $idSubcategoria);
+    $stmt->execute();
+    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $productos;
+}
+

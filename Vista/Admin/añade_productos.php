@@ -19,7 +19,6 @@
 </head>
 
 <body>
-
     <div class="wrapper">
         <?php include_once("../Vista/Components/admin_nav.php"); ?>
         <?php include_once("../Vista/Components/agregar_producto_modal.php"); ?>
@@ -57,16 +56,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($productos as $producto) : ?>
+                                            <?php foreach ($productos as $productos) : ?>
                                                 <tr>
-                                                    <td><?php echo $producto['codigo_barras']; ?></td>
-                                                    <td><?php echo $producto['nombre'] ?></td>
-                                                    <td><?php echo $producto['precio'] ?> €</td>
+                                                    <td><?php echo $productos['codigo_barras']; ?></td>
+                                                    <td><?php echo $productos['nombre'] ?></td>
+                                                    <td><?php echo $productos['precio'] ?> €</td>
                                                     <td>
                                                         <?php
                                                         $cantidad_disponible = 0;
                                                         foreach ($stock as $s) {
-                                                            if ($s['idProducto'] === $producto['idProducto']) {
+                                                            if ($s['idProducto'] === $productos['idProducto']) {
                                                                 $cantidad_disponible = $s['cantidadDisponible'];
                                                                 break;
                                                             }
@@ -75,8 +74,8 @@
                                                         ?>
                                                     </td>
                                                     <td>
-                                                        <button onclick="eliminarProducto(<?php echo $producto['idProducto'] ?>)" class="btn btn-danger"><i class="lni lni-trash-can"></i></button>
-                                                        <button onclick="editarProducto(<?php echo $producto['codigo_barras'] ?>)" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editarModal"><i class="lni lni-pencil"></i></button>
+                                                        <button onclick="eliminarProducto(<?php echo $productos['idProducto'] ?>)" class="btn btn-danger"><i class="lni lni-trash-can"></i></button>
+                                                        <button onclick="editarProducto(<?php echo $productos['codigo_barras'] ?>)" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editarModal"><i class="lni lni-pencil"></i></button>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>

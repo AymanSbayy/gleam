@@ -1,7 +1,59 @@
-document.getElementById("clear").addEventListener("click", function () {
-  document.getElementById("file").value = "";
-  document.getElementById("previewTableBody").innerHTML = "";
-  document.getElementById("impt").style.display = "none";
+$(document).ready(function () {
+  $("#searchInput").on("input", function () {
+    let searchText = $(this).val().toLowerCase();
+    let rows = $("#userTable tbody tr");
+
+    rows.each(function () {
+      let found = false;
+      let cells = $(this).find("td");
+
+      cells.each(function () {
+        let cellText = $(this).text().toLowerCase();
+        if (cellText.includes(searchText)) {
+          found = true;
+          return false; // exit the loop
+        }
+      });
+
+      if (found) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  });
+
+  $("#clear").click(function () {
+    $("#file").val("");
+    $("#previewTableBody").empty();
+    $("#impt").hide();
+  });
+
+  $(".toggle-btn").click(function () {
+    $("#sidebar").toggleClass("expand");
+  });
+
+  $("#categoria").change(function () {
+    let categoriaId = $(this).val();
+
+    $.ajax({
+      url: "acciones_usuarios.php",
+      type: "POST",
+      data: { categoria_id: categoriaId },
+      success: function (data) {
+        $("#subcategoria").empty();
+
+        $("#subcategoria").append(
+          "<option selected>Selecciona una subcategoría</option>"
+        );
+        $.each(data, function (index, nombreSubcategoria) {
+          $("#subcategoria").append(
+            "<option>" + nombreSubcategoria.nombre + "</option>"
+          );
+        });
+      },
+    });
+  });
 });
 
 function previewFile() {
@@ -130,13 +182,19 @@ function eliminarProducto(id) {
       type: "POST",
       data: { id: id, accion: "eliminar" },
       success: function (data) {
-        data = data.replace(/"/g, '');
+        data = data.replace(/"/g, "");
         if (data === "Producto eliminado correctamente") {
-          $.bootstrapGrowl("Producto eliminado correctamente.", { type: "success", width: "1000px" });
+          $.bootstrapGrowl("Producto eliminado correctamente.", {
+            type: "success",
+            width: "1000px",
+          });
         } else if (data === "No se puede eliminar un producto con stock") {
           $.bootstrapGrowl(data, { type: "danger", width: "1000px" });
         } else {
-          $.bootstrapGrowl("Error al eliminar el producto.", { type: "danger", width: "1000px" });
+          $.bootstrapGrowl("Error al eliminar el producto.", {
+            type: "danger",
+            width: "1000px",
+          });
         }
       },
     });
@@ -150,12 +208,15 @@ function editarProducto(id) {
     type: "POST",
     data: { id: id, accion: "info_producto" },
     success: function (data) {
-      console.log(data);
       data = JSON.parse(data);
-      $("#edit_codigo_barras").val(data.producto.codigo_de_barras);
+      $("#edit_codigo_barras").val(data.producto.codigo_barras);
       $("#edit_nombre").val(data.producto.nombre).prop("disabled", true);
       $("#edit_precio").val(data.producto.precio).prop("disabled", true);
-      $("#edit_descripcion").val(data.producto.descripcion).prop("disabled", true);
+      $("#edit_descripcion")
+        .val(data.producto.descripcion)
+        .prop("disabled", true);
+      $("#edit_descuento").val(data.producto.descuento).prop("disabled", true);
+      $("#editar_imagen").val(data.producto.imagen).prop("disabled", true);
       $("#edit_categoria").empty();
       $("#edit_subcategoria").empty();
 
@@ -177,16 +238,13 @@ function editarProducto(id) {
 
       $("#edit_categoria").prop("disabled", true);
       $("#edit_subcategoria").prop("disabled", true);
-      $("#edit_imagen").attr("src", data.producto.url_imagen).prop("disabled", true);
+      console.log(data.producto.imagen);
+      $("#edit_imagen")
+        .attr("src", data.producto.imagen)
+        .prop("disabled", true);
     },
   });
 }
-
-const hamBurger = document.querySelector(".toggle-btn");
-
-hamBurger.addEventListener("click", function () {
-  document.querySelector("#sidebar").classList.toggle("expand");
-});
 
 function openTab(evt, tabName) {
   let i, tabcontent, tablinks;
@@ -201,52 +259,3 @@ function openTab(evt, tabName) {
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
 }
-
-document.getElementById("searchInput").addEventListener("input", function () {
-  let searchText = this.value.toLowerCase();
-  let rows = document
-    .getElementById("userTable")
-    .getElementsByTagName("tbody")[0]
-    .getElementsByTagName("tr");
-
-  for (let i = 0; i < rows.length; i++) {
-    let found = false;
-    let cells = rows[i].getElementsByTagName("td");
-    for (let j = 0; j < cells.length; j++) {
-      let cellText = cells[j].textContent.toLowerCase();
-      if (cellText.includes(searchText)) {
-        found = true;
-        break;
-      }
-    }
-    if (found) {
-      rows[i].style.display = "";
-    } else {
-      rows[i].style.display = "none";
-    }
-  }
-});
-
-$(document).ready(function () {
-  $("#categoria").change(function () {
-    let categoriaId = $(this).val();
-
-    $.ajax({
-      url: "acciones_usuarios.php",
-      type: "POST",
-      data: { categoria_id: categoriaId },
-      success: function (data) {
-        $("#subcategoria").empty();
-
-        $("#subcategoria").append(
-          "<option selected>Selecciona una subcategoría</option>"
-        );
-        $.each(data, function (index, nombreSubcategoria) {
-          $("#subcategoria").append(
-            "<option>" + nombreSubcategoria.nombre + "</option>"
-          );
-        });
-      },
-    });
-  });
-});

@@ -16,6 +16,8 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
 
 ?>
 
+<?php include("carrito_compra.php"); ?>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
 <header class="carousel">
     <div class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner carousel-inner2">
@@ -119,7 +121,20 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
                     <?php } ?>
 
                     <li class="nav-item">
-                        <img src="../public/svg/basket.svg" alt="cart" class="nav_icon">
+                        <div class="cart-icon-container">
+                            <i class="bi bi-bag nav_icon larger_icon" onclick="openModal('carritoCompra')"></i>
+                            <?php
+                            if (isset($_COOKIE['carrito'])) {
+                                $numProductos = 0;
+                                foreach ($carrito as $item) {
+                                    $numProductos += $item['cantidad'];
+                                }
+                            } else {
+                                $numProductos = 0;
+                            }
+                            ?>
+                            <span class="badge" id="n_prodcutos"><?php echo $numProductos; ?></span>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -129,6 +144,10 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
         function toggleMenu() {
             var menu = document.getElementById("SubMenu");
             menu.classList.toggle("open-menu");
+        }
+
+        function openModal(id) {
+            $('#' + id).modal('show');
         }
     </script>
 

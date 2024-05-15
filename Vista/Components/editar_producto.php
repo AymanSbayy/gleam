@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 mt-3">
                             <div class="form-group">
                                 <label for="precio">Precio</label>
                                 <div class="input-group">
@@ -40,51 +40,37 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 mt-3">
+                            <div class="form-group">
+                                <label for="descuento">Descuento</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="edit_descuento" name="edit_descuento" disabled>
+                                    <button type="button" class="btn btn-info" id="edit_descuento_btn" onclick="habilitarCampo('edit_descuento')">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
                             <div class="form-group">
                                 <label for="descripcion">Descripcion</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="edit_descripcion" name="edit_descripcion" disabled>
+                                    <textarea class="form-control" id="edit_descripcion" name="edit_descripcion" rows="3" disabled></textarea>
                                     <button type="button" class="btn btn-info" id="edit_descripcion_btn" onclick="habilitarCampo('edit_descripcion')">
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="categoria">Categoria</label>
-                                <div class="input-group">
-                                    <select class="form-select" id="edit_categoria" name="edit_categoria" disabled>
-                                        <option value="1">Hogar y Jardinaria</option>
-                                    </select>
-                                    <button type="button" class="btn btn-info" id="edit_categoria_btn" onclick="habilitarCampo('edit_categoria')">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="subcategoria">Subcategoria</label>
-                                <div class="input-group">
-                                    <select class="form-select" id="edit_subcategoria" name="edit_subcategoria" disabled>
-                                    </select>
-                                    <button type="button" class="btn btn-info" id="edit_subcategoria_btn" onclick="habilitarCampo('edit_subcategoria')">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
+                        <div class="col-12 mt-3">
                             <div class="form-group">
                                 <label for="imagen">Imagen</label>
                                 <div class="input-group">
-                                    <img src="" id="edit_imagen" name="edit_imagen" alt="Imagen del Producto" style="width: 100px; height: 100px;">
-                                    <input type="file" class="form-control" id="editar_imagen" name="editar_imagen" disabled>
+                                    <input type="text" class="form-control" id="editar_imagen" name="editar_imagen" disabled onchange="mostrarImagen(this)">
                                     <button type="button" class="btn btn-info" id="edit_imagen_btn" onclick="habilitarCampo('editar_imagen')">
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
+                                    <img src="" id="edit_imagen" name="edit_imagen" alt="Imagen del Producto" class="img-thumbnail" style="max-width: 150px;">
                                 </div>
                             </div>
                         </div>
@@ -103,5 +89,21 @@
 <script>
     function habilitarCampo(id) {
         document.getElementById(id).disabled = false;
+    }
+
+    function habilitarCampo(id) {
+        document.getElementById(id).disabled = false;
+    }
+
+    function mostrarImagen(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#edit_imagen').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else if (input.value) {
+            $('#edit_imagen').attr('src', input.value);
+        }
     }
 </script>

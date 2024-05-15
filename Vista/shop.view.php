@@ -27,139 +27,184 @@
 <body>
     <?php include("Components/navbar.php"); ?>
     <?php include("Components/email_verified.php"); ?>
-    
-    <script>
-        function filtrarProductos(categoria) {
-            $.ajax({
-                url: "filtrar_productos.php",
-                type: "POST",
-                data: {
-                    categoria: categoria
-                },
-                success: function(response) {
-                    console.log(response);
-                    $('#productos-container').empty();
-                    $.each(response, function(index, producto) {
-                        var html = '<div class="col-12 col-md-6 col-lg-4 mt-5">';
-                        html += '<div class="card card-personal2">';
-                        html += '<img src="data:image/jpg;base64,' + producto.imagen + '" class="card-img" alt="' + producto.nombre + '">';
-                        html += '<div class="intro">';
-                        html += '<h5 class="">' + producto.nombre + '</h5>';
-                        html += '<p class="">' + producto.precio + ' €</p>';
-                        html += '<a href="#" style="color: white;" class="btn">Añadir a la cesta</a>';
-                        html += '</div>';
-                        html += '</div>';
-                        html += '</div>';
+    <div id="alert" name="alert">
+        <script>
+            function number_format(amount, decimals, dec_point, thousands_sep) {
+                amount = (amount + '').replace(/[^0-9+\-Ee.]/g, '');
+                var n = !isFinite(+amount) ? 0 : +amount,
+                    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                    s = '',
+                    toFixedFix = function(n, prec) {
+                        var k = Math.pow(10, prec);
+                        return '' + Math.round(n * k) / k;
+                    };
+                s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                if (s[0].length > 3) {
+                    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                }
+                if ((s[1] || '').length < prec) {
+                    s[1] = s[1] || '';
+                    s[1] += new Array(prec - s[1].length + 1).join('0');
+                }
+                return s.join(dec);
+            }
 
-                        $('#productos-container').append(html);
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error al filtrar productos:", error);
-                },
-            });
-        }
-    </script>
+            function filtrarProductos(categoria) {
+                $.ajax({
+                    url: "filtrar_productos.php",
+                    type: "POST",
+                    data: {
+                        categoria: categoria
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        $('#productos-container').empty();
+                        $.each(response, function(index, producto) {
+                            var html = '<div class="col-12 col-md-6 col-lg-4 mt-5">';
+                            html += '<div class="card card-personal2">';
+                            html += '<a href="producto.php?codigo_barras=' + producto.codigo_barras + '">';
+                            html += '<img src="' + producto.imagen + '" class="card-img" alt="' + producto.nombre + '">';
+                            html += '</a>';
+                            html += '<div class="intro">';
+                            html += '<h5 class="">' + producto.nombre + '</h5>';
 
-    <div class="mt-5">
-        <div class="row">
-            <div class="col-12 col-md-3">
-                <nav class="nav2">
-                    <ul class="list">
-                        <li class="list_item">
-                            <div class="list_button">
-                                <img src="../public/svg/all.svg" alt="" class="list_img">
-                                <a onclick="filtrarProductos('all')" class="nav_link">Todo</a>
-                            </div>
-                        </li>
+                            if (producto.descuento > 0) {
+                                html += '<p class="card-price">';
+                                html += '<del>' + number_format(producto.precio, 2, ',', '.') + ' €</del>';
+                                html += '<span style="font-size: 16px; margin-left: 10px;">' + number_format(producto.precio - (producto.precio * producto.descuento / 100), 2, ',', '.') + ' €</span>';
+                                html += '</p>';
+                            } else {
+                                html += '<p class="">' + number_format(producto.precio, 2, ',', '.') + ' €</p>';
+                            }
 
-                        <li class="list_item">
-                            <div class="list_button list_button-click">
-                                <img src="../public/svg/home.svg" alt="" class="list_img">
-                                <a onclick="filtrarProductos('Hogar y jardineria')" class="nav_link">Hogar y jardinería</a>
-                                <img src="../public/svg/arrow.svg" class="list_arrow">
-                            </div>
-                            <ul class="list_show">
-                                <li class="list_inside">
-                                    <a onclick="filtrarProductos('Interiores')" class="nav_link nav_link--inside">Decoración de Interiores</a>
-                                </li>
-                                <li class="list_inside">
-                                    <a onclick="filtrarProductos('Decoracion floral')" class="nav_link nav_link--inside">Decoración Floral</a>
-                                </li>
-                                <li class="list_inside">
-                                    <a onclick="filtrarProductos('Jardineria')" class="nav_link nav_link--inside">Herramientas de Jardinería</a>
-                                </li>
-                            </ul>
+                            html += '<a href="#" style="color: white;" class="btn">Añadir a la cesta</a>';
+                            html += '<a href="producto.php?codigo_barras=' + producto.codigo_barras + '" style="color: white;" class="btn">Ver producto</a>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '</div>';
 
-                        </li>
+                            $('#productos-container').append(html);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error al filtrar productos:", error);
+                    },
+                });
+            }
+        </script>
 
-                        <li class="list_item">
-                            <div class="list_button list_button-click">
-                                <img src="../public/svg/tecno.svg" alt="" class="list_img">
-                                <a onclick="filtrarProductos('Electrodomesticos')" class="nav_link">Electrodomésticos</a>
-                                <img src="../public/svg/arrow.svg" class="list_arrow">
-                            </div>
-                            <ul class="list_show">
-                                <li class="list_inside">
-                                    <a onclick="filtrarProductos('Cocina')" class="nav_link nav_link--inside">Electrodomésticos de Cocina</a>
-                                </li>
-                                <li class="list_inside">
-                                    <a onclick="filtrarProductos('Hogar')" class="nav_link nav_link--inside">Electrodomésticos para el Hogar</a>
-                                </li>
-                                <li class="list_inside">
-                                    <a onclick="filtrarProductos('Entretenimiento')" class="nav_link nav_link--inside">Electrónica de Entretenimiento</a>
-                                </li>
-                            </ul>
-                        </li>
+        <div class="mt-5">
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <nav class="nav2">
+                        <ul class="list">
+                            <li class="list_item">
+                                <div class="list_button">
+                                    <img src="../public/svg/all.svg" alt="" class="list_img">
+                                    <a onclick="filtrarProductos('all')" class="nav_link">Todo</a>
+                                </div>
+                            </li>
 
-                        <li class="list_item">
-                            <div class="list_button list_button-click">
-                                <img src="../public/svg/sports.svg" alt="" class="list_img">
-                                <a onclick="filtrarProductos('Deportes')" class="nav_link">Deportes</a>
-                                <img src="../public/svg/arrow.svg" class="list_arrow">
-                            </div>
-                            <ul class="list_show">
-                                <li class="list_inside">
-                                    <a onclick="filtrarProductos('Fitness')" class="nav_link nav_link--inside">Equipamiento para Fitness</a>
-                                </li>
-                                <li class="list_inside">
-                                    <a onclick="filtrarProductos('Ciclismo')" class="nav_link nav_link--inside">Accesorios para Ciclismo</a>
-                                </li>
-                                <li class="list_inside">
-                                    <a onclick="filtrarProductos('Acuaticos')" class="nav_link nav_link--inside">Equipamiento para Deportes Acuáticos</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                            <li class="list_item">
+                                <div class="list_button list_button-click">
+                                    <img src="../public/svg/home.svg" alt="" class="list_img">
+                                    <a onclick="filtrarProductos('Hogar y jardineria')" class="nav_link">Hogar y jardinería</a>
+                                    <img src="../public/svg/arrow.svg" class="list_arrow">
+                                </div>
+                                <ul class="list_show">
+                                    <li class="list_inside">
+                                        <a onclick="filtrarProductos('Interiores')" class="nav_link nav_link--inside">Decoración de Interiores</a>
+                                    </li>
+                                    <li class="list_inside">
+                                        <a onclick="filtrarProductos('Decoracion floral')" class="nav_link nav_link--inside">Decoración Floral</a>
+                                    </li>
+                                    <li class="list_inside">
+                                        <a onclick="filtrarProductos('Jardineria')" class="nav_link nav_link--inside">Herramientas de Jardinería</a>
+                                    </li>
+                                </ul>
 
-                </nav>
-            </div>
+                            </li>
 
-            <!-- Fin de la barra lateral de categorías -->
+                            <li class="list_item">
+                                <div class="list_button list_button-click">
+                                    <img src="../public/svg/tecno.svg" alt="" class="list_img">
+                                    <a onclick="filtrarProductos('Electrodomesticos')" class="nav_link">Electrodomésticos</a>
+                                    <img src="../public/svg/arrow.svg" class="list_arrow">
+                                </div>
+                                <ul class="list_show">
+                                    <li class="list_inside">
+                                        <a onclick="filtrarProductos('Cocina')" class="nav_link nav_link--inside">Electrodomésticos de Cocina</a>
+                                    </li>
+                                    <li class="list_inside">
+                                        <a onclick="filtrarProductos('Hogar')" class="nav_link nav_link--inside">Electrodomésticos para el Hogar</a>
+                                    </li>
+                                    <li class="list_inside">
+                                        <a onclick="filtrarProductos('Entretenimiento')" class="nav_link nav_link--inside">Electrónica de Entretenimiento</a>
+                                    </li>
+                                </ul>
+                            </li>
 
-            <!-- Mostrar productos -->
-            <div class="col-12 col-md-8">
-                <div id="productos-container" class="row">
-                    <?php
+                            <li class="list_item">
+                                <div class="list_button list_button-click">
+                                    <img src="../public/svg/sports.svg" alt="" class="list_img">
+                                    <a onclick="filtrarProductos('Deportes')" class="nav_link">Deportes</a>
+                                    <img src="../public/svg/arrow.svg" class="list_arrow">
+                                </div>
+                                <ul class="list_show">
+                                    <li class="list_inside">
+                                        <a onclick="filtrarProductos('Fitness')" class="nav_link nav_link--inside">Equipamiento para Fitness</a>
+                                    </li>
+                                    <li class="list_inside">
+                                        <a onclick="filtrarProductos('Ciclismo')" class="nav_link nav_link--inside">Accesorios para Ciclismo</a>
+                                    </li>
+                                    <li class="list_inside">
+                                        <a onclick="filtrarProductos('Acuaticos')" class="nav_link nav_link--inside">Equipamiento para Deportes Acuáticos</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
 
-                    foreach ($productos as $producto) : ?>
-                        <div class="col-12 col-md-6 col-lg-4 mt-5">
-                            <div class="card card card-personal2">
-                                <img src="data:image/jpg;base64,<?php echo $producto['imagen']; ?>" class="card-img" alt="<?php echo $producto['nombre']; ?>">
-                                <div class="intro">
-                                    <h5 class=""><?php echo $producto['nombre']; ?></h5>
-                                    <p class="">$<?php echo $producto['precio']; ?></p>
-                                    <a href="#" style="color: white;" class="btn">Añadir a la cesta</a>
+                    </nav>
+                </div>
+
+                <!-- Fin de la barra lateral de categorías -->
+
+                <!-- Mostrar productos -->
+                <div class="col-12 col-md-8">
+                    <div id="productos-container" class="row">
+                        <?php
+                        foreach ($productos as $producto) : ?>
+                            <div class="col-12 col-md-6 col-lg-4 mt-5">
+                                <div class="card card card-personal2">
+                                    <a href="producto.php?codigo_barras=<?php echo $producto['codigo_barras']; ?>">
+                                        <img src="<?php echo $producto['imagen']; ?>" class="card-img" alt="<?php echo $producto['nombre']; ?>">
+                                    </a>
+                                    <div class="intro">
+                                        <h5 class=""><?php echo $producto['nombre']; ?></h5>
+                                        
+                                        <?php if ($producto['descuento'] > 0) : ?>
+                                            <p class="card-price">
+                                                <del><?php echo number_format($producto['precio'], 2, ',', '.'); ?> €</del>
+                                                <span style="font-size: 16px; margin-left: 10px;"><?php echo number_format($producto['precio'] - ($producto['precio'] * $producto['descuento'] / 100), 2, ',', '.'); ?> €</span>
+                                            </p>
+                                        <?php else : ?>
+                                            <p class=""><?php echo number_format($producto['precio'], 2, ',', '.'); ?> €</p>
+                                        <?php endif; ?>
+                                        
+                                        <a href="#" style="color: white;" class="btn">Añadir a la cesta</a>
+                                        <a href="producto.php?codigo_barras=<?php echo $producto['codigo_barras']; ?>" style="color: white;" class="btn">Ver producto</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
+                <!-- Fin de mostrar productos -->
             </div>
-            <!-- Fin de mostrar productos -->
         </div>
-    </div>
-    <?php include("Components/footer.php"); ?>
+        <?php include("Components/footer.php"); ?>
 </body>
 
 </html>
