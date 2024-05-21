@@ -10,6 +10,39 @@ if (isset($_COOKIE['carrito'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+
+    if (isset($_POST['action']) && $_POST['action'] === 'update') {
+        $codigo_barras = $_POST['codigo_barras'];
+        $cantidad = $_POST['cantidad'];
+        $productIndex = -1;
+        foreach ($carrito as $index => $item) {
+            if ($item['codigo_barras'] === $codigo_barras) {
+                $productIndex = $index;
+                break;
+            }
+        }
+
+        if ($productIndex !== -1) {
+            $carrito[$productIndex]['cantidad'] = $cantidad;
+            $unidades_totales_del_carrito = 0;
+            foreach ($carrito as $item) {
+                $unidades_totales_del_carrito += $item['cantidad'];
+            }
+            setcookie('carrito', json_encode($carrito), time() + (1800), '/');
+            $response = [
+                'status' => 'success',
+                'data' => 'Cantidad actualizada correctamente',
+                'unidades_totales_del_carrito' => $unidades_totales_del_carrito
+            ];
+            echo json_encode($response);
+            exit;
+        }
+    }
+
+
+
+
     $codigo_barras = $_POST['codigo_barras'];
     $cantidad = $_POST['cantidad'];
     $existingProduct = 0;

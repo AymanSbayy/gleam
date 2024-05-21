@@ -9,7 +9,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <a href="login.php" class="btn btn-primary">Iniciar sesión</a>
+                <button type="button" style="background-color:#21164e;" class="btn btn-secondary" data-dismiss="modal" onclick="$('#loginModal').modal('show')">Iniciar sesión</button>
             </div>
         </div>
     </div>

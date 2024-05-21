@@ -6,6 +6,13 @@ function userIsBlocked($email) {
     return $user['bloqueado'];
 }
 
+function validateTelefono($telefono) {
+    if (empty($telefono)) {
+        return "El teléfono es obligatorio";
+    } else if (!preg_match("/^[0-9]{9}$/", $telefono)) {
+        return "El teléfono debe tener 9 dígitos";
+    }
+}
 
 // Validate nombrecompleto
 function validateNombreCompleto($nombrecompleto) {
@@ -45,6 +52,46 @@ function validatePassword($password) {
         return "La contraseña no puede tener más de 100 caracteres";
     } else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $password)) {
         return "La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número";
+    }
+}
+
+function validateDireccion($direccion) {
+    if ($direccion == "") {
+        return false;
+    } else if (strlen($direccion) > 100) {
+        return "La dirección no puede tener más de 100 caracteres";
+    }
+}
+
+function validateCodigoPostal($codigo_postal) {
+    if (empty($codigo_postal)) {
+        return "El código postal es obligatorio";
+    } else if (!preg_match("/^[0-9]{5}$/", $codigo_postal)) {
+        return "El código postal debe tener 5 dígitos";
+    }
+}
+
+function validateCiudad($ciudad) {
+    if (empty($ciudad)) {
+        return "La ciudad es obligatoria";
+    } else if (strlen($ciudad) > 100) {
+        return "La ciudad no puede tener más de 100 caracteres";
+    }
+}
+
+function validateProvincia($provincia) {
+    if (empty($provincia)) {
+        return "La provincia es obligatoria";
+    } else if (strlen($provincia) > 100) {
+        return "La provincia no puede tener más de 100 caracteres";
+    }
+}
+
+function validatePais($pais) {
+    if (empty($pais)) {
+        return "El país es obligatorio";
+    } else if (strlen($pais) > 100) {
+        return "El país no puede tener más de 100 caracteres";
     }
 }
 

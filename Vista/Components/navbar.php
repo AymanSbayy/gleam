@@ -17,6 +17,7 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
 ?>
 
 <?php include("carrito_compra.php"); ?>
+<?php include("login_error_modal.php"); ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
 <header class="carousel">
     <div class="carousel slide" data-bs-ride="carousel">
@@ -75,7 +76,15 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
             <div class="col-md-4">
                 <ul class="navbar-nav justify-content-end">
                     <?php
-                    if ($usuario !== null) { ?>
+                    if ($usuario !== null) {
+                        if (strpos($info['foto'], 'http') === false && !empty($info['foto'])) {
+                            $info['foto'] = 'data:image/jpeg;base64,' . $info['foto'];
+                        }
+
+                        if (empty($info['foto'])) {
+                            $info['foto'] = '../public/svg/login.svg';
+                        }
+                        ?>
                         <li class="nav-item">
                             <img src="<?php echo $info['foto']; ?>" alt="Foto de perfil" class="nav_icon" onclick="toggleMenu()" onmouseover="toggleMenu()" referrerpolicy="no-referrer">
                         </li>
@@ -116,7 +125,7 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
                         </div>
                     <?php } else { ?>
                         <li class="nav-item">
-                            <img src="../public/svg/login.svg" alt="user" class="nav_icon" onclick="$('#loginModal').modal('show')">
+                            <i class="bi bi-person nav_icon larger_icon2" onclick="$('#loginModal').modal('show')"></i>
                         </li>
                     <?php } ?>
 
@@ -174,14 +183,20 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary btn-lg" id="login">Iniciar sesión</button>
+                        <button type="button" style="background-color:#21164e;" class="btn btn-primary btn-lg" id="login">Iniciar sesión</button>
                     </div>
-                    <hr>
-                    <p class="text-center">¿Nuevo por aquí? <a href="#" data-bs-toggle="modal" data-bs-target="#registroModal" data-bs-dismiss="modal">Regístrate</a></p>
+                    <br>
+                    <p class="text-center">¿Nuevo por aquí? <a href="#" data-bs-toggle="modal" data-bs-target="#registroModal" style="color:#21164e;" data-bs-dismiss="modal">Regístrate</a></p>
                 </form>
             </div>
+            <hr>
+            <div class="text-center">
+                <p>o inicia sesión con</p>
+            </div>
             <div class="d-grid gap-2">
-                <a href="<?php echo $client->createAuthUrl(); ?>" class="btn btn-primary btn-lg">Iniciar sesión con Google</a>
+                <a href="<?php echo $client->createAuthUrl(); ?>" class="bg-light text-dark btn btn-lg">
+                    <i class="bi bi-google" style="color: black;"></i>
+                </a>
             </div>
         </div>
     </div>

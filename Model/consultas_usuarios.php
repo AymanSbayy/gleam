@@ -213,3 +213,65 @@ function getUserByEmail($email) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result;
 }
+
+function getDatosFacturacion($idUsuario) {
+    $conn = connexion();
+    $sql = "SELECT * FROM datos_facturacion WHERE idUsuario = :idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+function getDatosEnvio($idUsuario) {
+    $conn = connexion();
+    $sql = "SELECT * FROM datos_envio WHERE idUsuario = :idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+function cambiarPassword($password, $idUsuario) {
+    $conn = connexion();
+    $sql = "UPDATE usuarios SET password = '$password' WHERE idUsuario = $idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function cambiarDatosPersonales($nombre, $telefono, $foto, $idUsuario) {
+    $conn = connexion();
+    $sql = "UPDATE usuarios SET nombre = '$nombre', telefono = '$telefono', foto = '$foto' WHERE idUsuario = $idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function añadirDireccion($nombre,  $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user_id) {
+    $conn = connexion();
+    $sql = "INSERT INTO datos_envio (nombre, direccion, ciudad, provincia, codigoPostal, pais, idUsuario) VALUES ('$nombre', '$direccion', '$ciudad', '$provincia', '$codigoPostal', '$pais', $user_id)";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function actualizarDireccion($id ,$nombre,  $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user_id) {
+    $conn = connexion();
+    $sql = "UPDATE datos_envio SET nombre = '$nombre', direccion = '$direccion', ciudad = '$ciudad', provincia = '$provincia', codigoPostal = '$codigoPostal', pais = '$pais' WHERE idDireccionEnvio = $id AND idUsuario = $user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function añadirDatosFacturacion($nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user_id) {
+    $conn = connexion();
+    $sql = "INSERT INTO datos_facturacion (nombre, direccion, ciudad, provincia, codigoPostal, pais, idUsuario) VALUES ('$nombre', '$direccion', '$ciudad', '$provincia', '$codigoPostal', '$pais', $user_id)";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+function actualizarDatosFacturacion($id ,$nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user_id) {
+    $conn = connexion();
+    $sql = "UPDATE datos_facturacion SET nombre = '$nombre', direccion = '$direccion', ciudad = '$ciudad', provincia = '$provincia', codigoPostal = '$codigoPostal', pais = '$pais' WHERE idDireccionFacturacion = $id AND idUsuario = $user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}

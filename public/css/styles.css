@@ -1,6 +1,14 @@
 /* Carrusel */
+@font-face {
+  font-family: 'Apercu';
+  src: url('/fonts/Apercu-Regular.woff2') format('woff2'),
+       url('/fonts/Apercu-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
-  font-family: "Ginebra", sans-serif;
+  font-family: 'Apercu', sans-serif;
 }
 
 .hrr {
@@ -435,6 +443,8 @@ ul {
   width: 30px;
   height: 30px;
   margin-right: -30px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 
@@ -653,6 +663,20 @@ ul {
   font-weight: bold; /* Adjust the weight as needed */
 }
 
+.larger_icon2 {
+  font-size: 27px; /* Adjust the size as needed */
+  font-weight: bold; /* Adjust the weight as needed */
+}
+
+.larger_icon:hover {
+  color: #8b84a5;
+}
+
+.larger_icon2:hover {
+  color: #8b84a5;
+}
+
+
 .cart-icon-container {
   position: relative;
 }
@@ -667,4 +691,221 @@ ul {
   padding: 3px 6px;
   font-size: 12px;
   font-weight: bold;
+}
+.profile-menu {
+  position: absolute;
+
+  left: 0;
+  height: 80vh;
+  width: 30%;
+  padding: 0 32px 0 40px;
+  overflow: auto;
+
+}
+
+.profile-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-menu ul li {
+  margin-bottom: 15px;
+}
+
+.profile-menu ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+}
+
+.profile-menu ul li a:hover {
+  color: #747c76;
+}
+
+.content {
+  margin-left: 31%;
+  max-width: 55%;
+}
+
+.change_psswd {
+  font-size: .8rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.content h4 {
+  font-size: .9rem;
+  text-transform: uppercase;
+}
+
+.pencil-icon {
+  font-size: .8rem;
+  color: #21164e;
+  cursor: pointer;
+}
+
+.file-input-container {
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+}
+
+.file-input-container input[type="file"] {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+  border-radius: 50%;
+}
+
+.file-input-container img {
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.file-input-container .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.file-input-container:hover .overlay {
+  opacity: 1;
+}
+
+.perfil-card {
+  position: relative;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  margin: 20px 0 20px 0;
+  transition: all 0.3s ease;
+  margin-right: 20px; 
+  margin-bottom: 20px;
+}
+
+.perfil-card p {
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+.perfil-card .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.perfil-card:hover .overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.perfil-card:hover p {
+  color: #000000;
+}
+
+.perfil-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.checkout{
+  background-color: #ebe9e9b3;
+}
+
+.fondo_blanco{
+  padding: 40px 40px 20px 40px !important;
+  background-color: #fff;
+}
+
+.custom-select {
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.custom-select:hover {
+  border-color: #061e37;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.custom-select.selected {
+  border-color: #082340;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+}
+
+.maxwidth {
+  width: 100% !important;
+}
+
+
+.perfil-card2 {
+  position: relative;
+  background-color: #fff;
+  margin-bottom: 10px;
+}
+
+.perfil-card2 p {
+  font-size: 12px;
+  margin: 0;
+}
+
+.perfil-card2 .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: rgba(5, 2, 55, 0.344);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.perfil-card2:hover .overlay {
+  opacity: 1;
+  transform: translateY(0);
 }
