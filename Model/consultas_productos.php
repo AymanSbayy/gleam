@@ -169,7 +169,7 @@ function insertarProducto($producto, $unidades)
 function insertarCompra($producto, $unidades, $total)
 {
     $conn = connexion();
-    $sql = "INSERT INTO compra (producto, cantidad, total, fecha) VALUES (:producto, :unidades, :total, NOW())";
+    $sql = "INSERT INTO compra (producto, cantidad, total, fecha, hora) VALUES (:producto, :unidades, :total, NOW(), CURTIME())";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':producto', $producto);
     $stmt->bindParam(':unidades', $unidades);

@@ -19,11 +19,10 @@ function validateTelefono($telefono) {
 
 // Validate nombrecompleto
 function validateNombreCompleto($nombrecompleto) {
-    //Comprobar que haya obligatoriamente tambien apellidos
     if (empty($nombrecompleto)) {
         return "El nombre y apellidos son obligatorios";
-    } else if (!preg_match("/^[a-zA-Z-' ]*$/", $nombrecompleto)) {
-        return "Solo se permiten letras y espacios en blanco";
+    } else if (!preg_match("/^[a-zA-Z-'áéíóúÁÉÍÓÚ ]*$/u", $nombrecompleto)) {
+        return "Solo se permiten letras, espacios en blanco y acentos";
     } else if (strlen($nombrecompleto) > 100) {
         return "El nombre y apellidos no pueden tener más de 100 caracteres";
     } 

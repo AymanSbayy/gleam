@@ -36,14 +36,22 @@ if (isLoggedIn()) {
                     $currentYear = intval(date('y'));
                     $currentMonth = intval(date('m'));
 
-                    $expiryMonth = intval($matches[1]);
-                    $expiryYear = intval($matches[2]);
+                    if (isset($payingData['expiry'])) {
+                        $expiry = $payingData['expiry'];
+                        $expiryParts = explode('/', $expiry);
+                        $expiryMonth = intval($expiryParts[0]);
+                        $expiryYear = intval($expiryParts[1]);
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'Falta la fecha de caducidad de la tarjeta de crédito']);
+                        return;
+                    }
 
                     if ($expiryYear < $currentYear || ($expiryYear == $currentYear && $expiryMonth < $currentMonth)) {
                         echo json_encode(['status' => 'error', 'message' => 'La tarjeta de crédito ha expirado']);
                         return;
                     }
 
+                    $payingData['number'] = str_replace(' ', '', $payingData['number']);
                     if (!preg_match('/^[0-9]{16}$/', $payingData['number'])) {
                         echo json_encode(['status' => 'error', 'message' => 'El número de tarjeta de crédito no es válido']);
                         return;

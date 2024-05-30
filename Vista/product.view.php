@@ -64,13 +64,9 @@
                             <p class="mt-3" style="font-size: 16px;"><?php echo $productos['descripcion'] ?></p>
                             <p class="mt-3" style="font-size: 16px;"><i class="fas fa-truck"></i> Este producto llega en <?php echo date('d/m/Y', strtotime('+2 days')) ?></p>
                         </div>
-                        <div class="col mt-3">
-                            <button type="submit" class="btn btn-dark" style="width: 100%;">Comprar</button>
-                        </div>
                     </form>
                     <a href="#" class="btn btn-secondary mt-2" style="width: 100%;" onclick="añadirCesta('<?php echo $productos['codigo_barras']; ?>', $('#unidades_venta').val())">Añadir al carrito</a>
                 </div>
-                <!-- Hidden inputs -->
                 <input type="hidden" id="codigo_barras" value="<?php echo $productos['codigo_barras'] ?>">
             </div>
         </div>
