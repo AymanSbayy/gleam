@@ -35,11 +35,13 @@ function registerUser($nombrecompleto, $email, $password, $activation_token_hash
     
 
     $conn = connexion();
-    $sql = "INSERT INTO usuarios (nombre, email, password, administrador, fechaRegistro, account_activation_token) VALUES ('$nombrecompleto', '$email', '$password', 0, NOW(), '$activation_token_hash')";
+    $sql = "INSERT INTO usuarios (nombre, email, password, administrador, fechaRegistro, account_activation_token, bloqueado) VALUES ('$nombrecompleto', '$email', '$password', 0, NOW(), '$activation_token_hash', 0)";
     $stmt = $conn->prepare($sql);
     $result = $stmt->execute();
     return $result;
 }
+
+
 
 /**
  * Activa la cuenta de un usuario.

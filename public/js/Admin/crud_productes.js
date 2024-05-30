@@ -65,10 +65,7 @@ $(document).ready(function () {
           $.bootstrapGrowl(data, { type: "danger", width: "1000px" });
         } else if (data === "El precio debe ser un número válido") {
           $.bootstrapGrowl(data, { type: "danger", width: "1000px" });
-        } else if (
-          data ===
-          "La imagen no puede estar vacía"
-        ) {
+        } else if (data === "La imagen no puede estar vacía") {
           $.bootstrapGrowl(data, { type: "danger", width: "1000px" });
         } else if (data === "Producto editado correctamente") {
           $.bootstrapGrowl(data, { type: "success", width: "1000px" });
@@ -188,6 +185,36 @@ $(document).ready(function () {
   });
 
   $("#añadirP").click(function () {
+    let categoria = $("#categoria").val();
+    let subcategoria = $("#subcategoria").val();
+    let imagen = $("#imagen").val();
+
+    //Comprobar que la imagen es una URL válida
+    if ( !imagen.match(/\.(jpeg|jpg|gif|png)$/) ) {
+      $.bootstrapGrowl("La imagen debe ser un archivo de imagen válido (jpg, jpeg, png, gif)", {
+        type: "danger",
+        width: "1000px",
+      });
+      return;
+    }
+    
+
+    if (categoria == null) {
+      $.bootstrapGrowl("Debes seleccionar una categoría", {
+        type: "danger",
+        width: "1000px",
+      });
+      return;
+    }
+
+    if (subcategoria == null) {
+      $.bootstrapGrowl("Debes seleccionar una subcategoría", {
+        type: "danger",
+        width: "1000px",
+      });
+      return;
+    }
+
     let data = new FormData();
     data.append("nombre", $("#nombre").val());
     data.append("precio", $("#precio").val());
@@ -201,6 +228,8 @@ $(document).ready(function () {
     data.append("aumento_iva", $("#aumento_iva").val());
     data.append("total", $("#total").val());
     data.append("action", "añadir_producto");
+
+    
 
     $.ajax({
       type: "POST",

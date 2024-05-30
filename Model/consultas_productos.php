@@ -169,14 +169,15 @@ function insertarProducto($producto, $unidades)
 function insertarCompra($producto, $unidades, $total)
 {
     $conn = connexion();
-    $sql = "INSERT INTO compra (producto, cantidad, total) VALUES (:idProducto, :unidades, :total)";
+    $sql = "INSERT INTO compra (producto, cantidad, total, fecha) VALUES (:producto, :unidades, :total, NOW())";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':idProducto', $producto);
+    $stmt->bindParam(':producto', $producto);
     $stmt->bindParam(':unidades', $unidades);
     $stmt->bindParam(':total', $total);
     $stmt->execute();
     return true;
 }
+
 
 function getStock()
 {
@@ -208,7 +209,6 @@ function eliminarProducto($producto)
     $stmt->execute();
     return true;
 }
-
 function editarProducto($producto, $nombre, $precio, $descripcion, $imagen, $descuento)
 {
     $conn = connexion();
@@ -223,4 +223,112 @@ function editarProducto($producto, $nombre, $precio, $descripcion, $imagen, $des
     $stmt->execute();
     return true;
 }
+function registrarVenta($producto, $unidades, $idUsuario, $total)
+{
+    $conn = connexion();
+    $sql = "INSERT INTO ventas (idProducto, idUsuario, cantidad, total, fecha, hora, llegaEl) VALUES (:producto, :idUsuario, :unidades, :total, NOW(), CURTIME(), DATE_ADD(NOW(), INTERVAL 2 DAY))";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':producto', $producto);
+    $stmt->bindParam(':idUsuario', $idUsuario);
+    $stmt->bindParam(':unidades', $unidades);
+    $stmt->bindParam(':total', $total, PDO::PARAM_STR);
+    $stmt->execute();
+    return true;
+}
 
+function registrarPedido($idUsuario, $direccion, $facturacion, $total, $metodoPago)
+{
+    $conn = connexion();
+    $sql = "INSERT INTO pedidos (idUsuario, fecha, direccion, facturacion, total, metodoPago) VALUES (:idUsuario, NOW(), :direccion, :facturacion, :total, :metodoPago)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':idUsuario', $idUsuario);
+    $stmt->bindParam(':direccion', $direccion);
+    $stmt->bindParam(':facturacion', $facturacion);
+    $stmt->bindParam(':total', $total, PDO::PARAM_STR);
+    $stmt->bindParam(':metodoPago', $metodoPago);
+    $stmt->execute();
+    return true;
+}
+
+function updateStock($producto, $stock)
+{
+    $conn = connexion();
+    $sql = "UPDATE stocks SET cantidadDisponible = :stock WHERE idProducto = :idProducto";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':stock', $stock);
+    $stmt->bindParam(':idProducto', $producto);
+    $stmt->execute();
+    return true;
+}
+
+function getProductosPedidos($idUsuario)
+{
+    $conn = connexion();
+    $sql = "SELECT * FROM ventas WHERE idUsuario = :idUsuario";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':idUsuario', $idUsuario);
+    $stmt->execute();
+    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $productos;
+}
+
+function getProductoById($idProducto)
+{
+    $conn = connexion();
+    $sql = "SELECT * FROM productos WHERE idProducto = :idProducto";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':idProducto', $idProducto);
+    $stmt->execute();
+    $producto = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $producto;
+}
+
+function getCompras()
+{
+    $conn = connexion();
+    $sql = "SELECT * FROM compra";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $compras;
+}
+
+function getProductosVendidos()
+{
+    $conn = connexion();
+    $sql = "SELECT * FROM ventas";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $productos;
+}
+
+function getComprasLastWeek()
+{
+    $conn = connexion();
+    $sql = "SELECT * FROM compra WHERE fecha >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $compras;
+}
+
+function getComprasLastMonth()
+{
+    $conn = connexion();
+    $sql = "SELECT * FROM compra WHERE fecha >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $compras;
+}
+
+function getComprasLastYear()
+{
+    $conn = connexion();
+    $sql = "SELECT * FROM compra WHERE fecha >= DATE_SUB(NOW(), INTERVAL 1 YEAR)";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $compras;
+}

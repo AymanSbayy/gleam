@@ -171,14 +171,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $file = $_FILES['file'];
         $file = file_get_contents($file['tmp_name']);
         $file = explode("\n", $file);
-        $productos = array();
+        $productoss = array();
 
         foreach ($file as $key => $line) {
             if ($key === 0) {
                 continue;
             }
             $line = explode("|", $line);
-            $productos = array(
+            $productos2 = array(
                 'codigo_barras' => $line[0],
                 'nombre' => $line[1],
                 'precio' => $line[2],
@@ -188,13 +188,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'subcategoria' => $line[6],
                 'url_imagen' => $line[7]
             );
-            array_push($productos, $productos);
-            if (!verificarCategoria($productos['categoria']) || !verificarSubcategoria($productos['subcategoria'])) {
-                echo json_encode("Error: La categoría o subcategoría en el producto " . $productos['nombre'] . " no es válida.");
+            array_push($productoss, $productos2);
+            if (!verificarCategoria($productos2['categoria']) || !verificarSubcategoria($productos2['subcategoria'])) {
+                echo json_encode("Error: La categoría o subcategoría en el producto " . $productos2['nombre'] . " no es válida.");
                 return;
             }
         }
-        foreach ($productos as $productos) {
+        
+        foreach ($productoss as $productos) {
             $nombre = $productos['nombre'];
             $precio = $productos['precio'];
             $descripcion = $productos['descripcion'];

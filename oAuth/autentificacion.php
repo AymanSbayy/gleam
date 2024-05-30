@@ -14,9 +14,7 @@ if (isset($_GET['code'])) {
     $foto = $user->picture;
 
     if (!userIsBlocked($email) == 1) {
-        header("Location: ../Controlador/welcome.php");
         if (!emailExists($email)) {
-
             registerUserOAuth($nombre, $email, $foto, $provider, $token["access_token"]);
             $_SESSION['usuario'] = $email;
         } else {

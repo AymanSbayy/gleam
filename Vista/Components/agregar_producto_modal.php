@@ -24,7 +24,7 @@
                         </div>
                         <div class="col">
                             <label for="unidades" class="form-label">Unidades</label>
-                            <input type="number" class="form-control" id="unidades" name="unidades" required>
+                            <input type="number" class="form-control" id="unidades" name="unidades" required min="0">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -76,7 +76,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end">
-                        <button id="añadirP" type="button" class="btn btn-dark">Comprar</button>
+                        <button id="añadirP" type="submit" class="btn btn-dark">Comprar</button>
                     </div>
                 </form>
             </div>

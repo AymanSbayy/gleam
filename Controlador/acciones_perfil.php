@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = getUserByEmail($_SESSION["usuario"]);
 
         if ($user['provider'] !== null) {
-            echo json_encode(array('status' => 'error', 'message' => 'No puedes cambiar la contraseña si has iniciado sesión con Google o Facebook'));
+            echo json_encode(array('status' => 'error', 'message' => 'No puedes cambiar la contraseña si has iniciado sesión con login social'));
             return;
         }
 
@@ -86,181 +86,183 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         cambiarDatosPersonales($nombre, $telefono, $foto, $user['idUsuario']);
         echo json_encode(array('status' => 'success', 'message' => 'Datos personales cambiados correctamente'));
     } else if (isset($_POST['action']) && $_POST['action'] === 'save_shipping_info') {
+        $id = "";
         if (isset($_POST['id'])) {
             $id = $_POST['id'];
-            if (empty($id)) {
-                if (!empty($_POST['nombre']) && !empty($_POST['direccion']) && !empty($_POST['ciudad']) && !empty($_POST['provincia']) && !empty($_POST['codigoPostal']) && !empty($_POST['pais'])) {
-                    $nombre = $_POST['nombre'];
-                    $direccion = $_POST['direccion'];
-                    $ciudad = $_POST['ciudad'];
-                    $provincia = $_POST['provincia'];
-                    $codigoPostal = $_POST['codigoPostal'];
-                    $pais = $_POST['pais'];
+        }
+        if (empty($id)) {
+            if (!empty($_POST['nombre']) && !empty($_POST['direccion']) && !empty($_POST['ciudad']) && !empty($_POST['provincia']) && !empty($_POST['codigoPostal']) && !empty($_POST['pais'])) {
+                $nombre = $_POST['nombre'];
+                $direccion = $_POST['direccion'];
+                $ciudad = $_POST['ciudad'];
+                $provincia = $_POST['provincia'];
+                $codigoPostal = $_POST['codigoPostal'];
+                $pais = $_POST['pais'];
 
 
-                    if (validateDireccion($direccion)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La dirección que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateCiudad($ciudad)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La ciudad que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateProvincia($provincia)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La provincia que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateCodigoPostal($codigoPostal)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'El código postal que has introducido no es válido'));
-                        return;
-                    }
-
-                    if (validatePais($pais)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'El país que has introducido no es válido'));
-                        return;
-                    }
-
-                    $user = getUserByEmail($_SESSION["usuario"]);
-
-                    añadirDireccion($nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user['idUsuario']);
-                    echo json_encode(array('status' => 'success', 'message' => 'Dirección añadida correctamente'));
-                } else {
-                    echo json_encode(array('status' => 'error', 'message' => 'Por favor, rellena todos los campos'));
+                if (validateDireccion($direccion)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La dirección que has introducido no es válida'));
+                    return;
                 }
+
+                if (validateCiudad($ciudad)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La ciudad que has introducido no es válida'));
+                    return;
+                }
+
+                if (validateProvincia($provincia)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La provincia que has introducido no es válida'));
+                    return;
+                }
+
+                if (validateCodigoPostal($codigoPostal)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'El código postal que has introducido no es válido'));
+                    return;
+                }
+
+                if (validatePais($pais)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'El país que has introducido no es válido'));
+                    return;
+                }
+
+                $user = getUserByEmail($_SESSION["usuario"]);
+
+                añadirDireccion($nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user['idUsuario']);
+                echo json_encode(array('status' => 'success', 'message' => 'Dirección añadida correctamente'));
             } else {
-                if (!empty($_POST['nombre']) && !empty($_POST['direccion']) && !empty($_POST['ciudad']) && !empty($_POST['provincia']) && !empty($_POST['codigoPostal']) && !empty($_POST['pais'])) {
-                    $nombre = $_POST['nombre'];
-                    $direccion = $_POST['direccion'];
-                    $ciudad = $_POST['ciudad'];
-                    $provincia = $_POST['provincia'];
-                    $codigoPostal = $_POST['codigoPostal'];
-                    $pais = $_POST['pais'];
-                    $id = $_POST['id'];
+                echo json_encode(array('status' => 'error', 'message' => 'Por favor, rellena todos los campos'));
+            }
+        } else {
+            if (!empty($_POST['nombre']) && !empty($_POST['direccion']) && !empty($_POST['ciudad']) && !empty($_POST['provincia']) && !empty($_POST['codigoPostal']) && !empty($_POST['pais'])) {
+                $nombre = $_POST['nombre'];
+                $direccion = $_POST['direccion'];
+                $ciudad = $_POST['ciudad'];
+                $provincia = $_POST['provincia'];
+                $codigoPostal = $_POST['codigoPostal'];
+                $pais = $_POST['pais'];
+                $id = $_POST['id'];
 
 
-                    if (validateDireccion($direccion)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La dirección que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateCiudad($ciudad)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La ciudad que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateProvincia($provincia)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La provincia que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateCodigoPostal($codigoPostal)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'El código postal que has introducido no es válido'));
-                        return;
-                    }
-
-                    if (validatePais($pais)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'El país que has introducido no es válido'));
-                        return;
-                    }
-
-                    $user = getUserByEmail($_SESSION["usuario"]);
-
-                    actualizarDireccion($id, $nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user['idUsuario']);
-                    echo json_encode(array('status' => 'success', 'message' => 'Dirección actualizada correctamente'));
-                } else {
-                    echo json_encode(array('status' => 'error', 'message' => 'Por favor, rellena todos los campos'));
+                if (validateDireccion($direccion)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La dirección que has introducido no es válida'));
+                    return;
                 }
+
+                if (validateCiudad($ciudad)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La ciudad que has introducido no es válida'));
+                    return;
+                }
+
+                if (validateProvincia($provincia)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La provincia que has introducido no es válida'));
+                    return;
+                }
+
+                if (validateCodigoPostal($codigoPostal)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'El código postal que has introducido no es válido'));
+                    return;
+                }
+
+                if (validatePais($pais)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'El país que has introducido no es válido'));
+                    return;
+                }
+
+                $user = getUserByEmail($_SESSION["usuario"]);
+
+                actualizarDireccion($id, $nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user['idUsuario']);
+                echo json_encode(array('status' => 'success', 'message' => 'Dirección actualizada correctamente'));
+            } else {
+                echo json_encode(array('status' => 'error', 'message' => 'Por favor, rellena todos los campos'));
             }
         }
     } else if (isset($_POST['action']) && $_POST['action'] === 'save_billing_info') {
+        $id = "";
         if (isset($_POST['id'])) {
             $id = $_POST['id'];
-            if (empty($id)) {
-                if (!empty($_POST['nombre']) && !empty($_POST['direccion']) && !empty($_POST['ciudad']) && !empty($_POST['provincia']) && !empty($_POST['codigoPostal']) && !empty($_POST['pais'])) {
-                    $nombre = $_POST['nombre'];
-                    $direccion = $_POST['direccion'];
-                    $ciudad = $_POST['ciudad'];
-                    $provincia = $_POST['provincia'];
-                    $codigoPostal = $_POST['codigoPostal'];
-                    $pais = $_POST['pais'];
+        }
+        if (empty($id)) {
+            if (!empty($_POST['nombre']) && !empty($_POST['direccion']) && !empty($_POST['ciudad']) && !empty($_POST['provincia']) && !empty($_POST['codigoPostal']) && !empty($_POST['pais'])) {
+                $nombre = $_POST['nombre'];
+                $direccion = $_POST['direccion'];
+                $ciudad = $_POST['ciudad'];
+                $provincia = $_POST['provincia'];
+                $codigoPostal = $_POST['codigoPostal'];
+                $pais = $_POST['pais'];
 
-                    if (validateDireccion($direccion)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La dirección que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateCiudad($ciudad)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La ciudad que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateProvincia($provincia)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La provincia que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateCodigoPostal($codigoPostal)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'El código postal que has introducido no es válido'));
-                        return;
-                    }
-
-                    if (validatePais($pais)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'El país que has introducido no es válido'));
-                        return;
-                    }
-
-                    $user = getUserByEmail($_SESSION["usuario"]);
-
-                    añadirDatosFacturacion($nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user['idUsuario']);
-                    echo json_encode(array('status' => 'success', 'message' => 'Datos de facturación añadidos correctamente'));
-                } else {
-                    echo json_encode(array('status' => 'error', 'message' => 'Por favor, rellena todos los campos'));
+                if (validateDireccion($direccion)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La dirección que has introducido no es válida'));
+                    return;
                 }
+
+                if (validateCiudad($ciudad)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La ciudad que has introducido no es válida'));
+                    return;
+                }
+
+                if (validateProvincia($provincia)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La provincia que has introducido no es válida'));
+                    return;
+                }
+
+                if (validateCodigoPostal($codigoPostal)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'El código postal que has introducido no es válido'));
+                    return;
+                }
+
+                if (validatePais($pais)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'El país que has introducido no es válido'));
+                    return;
+                }
+
+                $user = getUserByEmail($_SESSION["usuario"]);
+
+                añadirDatosFacturacion($nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user['idUsuario']);
+                echo json_encode(array('status' => 'success', 'message' => 'Datos de facturación añadidos correctamente', 'id' => $id, 'direccion' => $direccion));
             } else {
-                if (!empty($_POST['nombre']) && !empty($_POST['direccion']) && !empty($_POST['ciudad']) && !empty($_POST['provincia']) && !empty($_POST['codigoPostal']) && !empty($_POST['pais'])) {
-                    $nombre = $_POST['nombre'];
-                    $direccion = $_POST['direccion'];
-                    $ciudad = $_POST['ciudad'];
-                    $provincia = $_POST['provincia'];
-                    $codigoPostal = $_POST['codigoPostal'];
-                    $pais = $_POST['pais'];
-                    $id = $_POST['id'];
+                echo json_encode(array('status' => 'error', 'message' => 'Por favor, rellena todos los campos'));
+            }
+        } else {
+            if (!empty($_POST['nombre']) && !empty($_POST['direccion']) && !empty($_POST['ciudad']) && !empty($_POST['provincia']) && !empty($_POST['codigoPostal']) && !empty($_POST['pais'])) {
+                $nombre = $_POST['nombre'];
+                $direccion = $_POST['direccion'];
+                $ciudad = $_POST['ciudad'];
+                $provincia = $_POST['provincia'];
+                $codigoPostal = $_POST['codigoPostal'];
+                $pais = $_POST['pais'];
+                $id = $_POST['id'];
 
-                    if (validateDireccion($direccion)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La dirección que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateCiudad($ciudad)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La ciudad que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateProvincia($provincia)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'La provincia que has introducido no es válida'));
-                        return;
-                    }
-
-                    if (validateCodigoPostal($codigoPostal)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'El código postal que has introducido no es válido'));
-                        return;
-                    }
-
-                    if (validatePais($pais)) {
-                        echo json_encode(array('status' => 'error', 'message' => 'El país que has introducido no es válido'));
-                        return;
-                    }
-
-                    $user = getUserByEmail($_SESSION["usuario"]);
-
-                    actualizarDatosFacturacion($id, $nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user['idUsuario']);
-                    echo json_encode(array('status' => 'success', 'message' => 'Datos de facturación actualizados correctamente'));
-                } else {
-                    echo json_encode(array('status' => 'error', 'message' => 'Por favor, rellena todos los campos'));
+                if (validateDireccion($direccion)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La dirección que has introducido no es válida'));
+                    return;
                 }
+
+                if (validateCiudad($ciudad)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La ciudad que has introducido no es válida'));
+                    return;
+                }
+
+                if (validateProvincia($provincia)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'La provincia que has introducido no es válida'));
+                    return;
+                }
+
+                if (validateCodigoPostal($codigoPostal)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'El código postal que has introducido no es válido'));
+                    return;
+                }
+
+                if (validatePais($pais)) {
+                    echo json_encode(array('status' => 'error', 'message' => 'El país que has introducido no es válido'));
+                    return;
+                }
+
+                $user = getUserByEmail($_SESSION["usuario"]);
+
+                actualizarDatosFacturacion($id, $nombre, $direccion, $ciudad, $provincia, $codigoPostal, $pais, $user['idUsuario']);
+                echo json_encode(array('status' => 'success', 'message' => 'Datos de facturación actualizados correctamente'));
+            } else {
+                echo json_encode(array('status' => 'error', 'message' => 'Por favor, rellena todos los campos'));
             }
         }
     }

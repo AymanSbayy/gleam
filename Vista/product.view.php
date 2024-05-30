@@ -19,9 +19,12 @@
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <script src="../public/js/product.js"></script>
 
 </head>
@@ -102,7 +105,7 @@
                                 }
                                 ?>
                                 <!-- hidden inputs -->
-                                <a href="#" style="color: white;" class="btn" id="añadir_cesta" onclick="añadirCesta('<?php echo $productos['codigo_barras']; ?>', 1)">Añadir al carrito</a>
+                                <a href="#" style="color: white;" class="btn" id="añadir_cesta" onclick="añadirCesta('<?php echo (string)$productos['codigo_barras']; ?>', 1)">Añadir al carrito</a>
                                 <a href="producto.php?codigo_barras=<?php echo $productos['codigo_barras']; ?>" style="color: white;" class="btn">Ver producto</a>
                             </div>
                         </div>

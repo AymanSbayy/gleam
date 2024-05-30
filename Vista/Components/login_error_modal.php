@@ -8,7 +8,6 @@
                 <p>Para poder realizar esta acción, debes iniciar sesión.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="button" style="background-color:#21164e;" class="btn btn-secondary" data-dismiss="modal" onclick="$('#loginModal').modal('show')">Iniciar sesión</button>
             </div>
         </div>

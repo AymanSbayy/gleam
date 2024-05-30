@@ -77,7 +77,7 @@ if (isset($_COOKIE['carrito'])) {
           foreach ($carrito as $producto_carrito) {
             $productos_carrito = getProductoByCodigoBarras($producto_carrito['codigo_barras']);
             if ($productos_carrito['descuento'] > 0) {
-              $total += ($productos_carrito['precio'] - ($productos_carrito['precio'] * $productos_carrito['descuento'] / 100)) * $producto_carrito['cantidad'];
+                $total += round(($productos_carrito['precio'] - ($productos_carrito['precio'] * $productos_carrito['descuento'] / 100)) * $producto_carrito['cantidad'], 2);
             } else {
               $total += $productos_carrito['precio'] * $producto_carrito['cantidad'];
             }
@@ -132,6 +132,7 @@ if (isset($_COOKIE['carrito'])) {
   }
 
   function añadirCesta(codigo_barras, cantidad) {
+    codigo_barras = codigo_barras.toString();
     $.ajax({
       url: "añadir_producto_carrito.php",
       type: "POST",
@@ -165,7 +166,7 @@ if (isset($_COOKIE['carrito'])) {
           </div>
           <div class="product" data-codigo="${response.producto.codigo_barras}">
           <strong>
-          ${response.producto.descuento > 0 ? `<del id='precio_producto'>${response.producto.precio} €</del> <span id='precio_con_descuento' style='font-size: 18px; margin-left:10px; color:red;'>${response.producto.precio - (response.producto.precio * response.producto.descuento / 100)} €</span>` : `<span id='precio_producto'>${response.producto.precio} €</span>`}
+            ${response.producto.descuento > 0 ? `<del id='precio_producto'>${response.producto.precio.toFixed(2)} €</del> <span id='precio_con_descuento' style='font-size: 18px; margin-left:10px; color:red;'>${(response.producto.precio - (response.producto.precio * response.producto.descuento / 100)).toFixed(2)} €</span>` : `<span id='precio_producto'>${response.producto.precio.toFixed(2)} €</span>`}
           </strong>
             <input type="number" value="${response.cantidad}" class="form-control cantidad" style="width: 60px;" min="1" max="${response.stock}" id="cantidad_${response.producto.codigo_barras}" onchange="cambioCantidad('${response.producto.codigo_barras}')">
             <a class="trash-can" onclick="eliminarProducto('${response.producto.codigo_barras}')">
@@ -181,7 +182,7 @@ if (isset($_COOKIE['carrito'])) {
           }
           añadirTotal();
         } else {
-          $.bootstrapGrowl("Error al añadir producto al carrito", {
+          $.bootstrapGrowl(response.data, {
             type: "danger",
             delay: 2000,
             width: "1000px",

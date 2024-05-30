@@ -6,7 +6,7 @@ require_once("../Middleware/LoggedIn.php");
 
 $client_id = "104014291509-d17dlm3rd8e6shgvarenv72dn371nv00.apps.googleusercontent.com";
 $client_secret = "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";
-$redirect_uri = "http://localhost/gleam/Controlador/welcome.php";
+$redirect_uri = "http://asbay.dawprojectes.sapalomera.cat/gleam/Controlador/welcome.php";
 
 $client = new Google_Client();
 $client->setClientId($client_id);

@@ -63,8 +63,56 @@ function sendEmail($email, $activation_token)
         $mail->addReplyTo('a.sbay@sapalomera.cat', 'Gleam');
         $mail->isHTML(true);
         $mail->Subject = 'Activación de cuenta';
-        $mail->Body = "Haz click en el siguiente enlace para activar tu cuenta: <a href='http://localhost/gleam/Controlador/activacion.php?token=$activation_token'>Activar cuenta</a>";
-        $mail->AltBody = 'Haz click en el siguiente enlace para activar tu cuenta: http://localhost/gleam/Controlador/activacion.php?token=$activation_token';
+        $mail->Subject = 'Activación de cuenta';
+        $mail->Body = "<html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                .logo {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .content {
+                    text-align: justify;
+                }
+                .btn {
+                    display: inline-block;
+                    padding: 10px 20px;
+                    background-color: #007bff;
+                    color: #fff;
+                    text-decoration: none;
+                    border-radius: 5px;
+                }
+            </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='logo'>
+                        <img src='ruta/a/tu/logo.png' alt='Logo'>
+                    </div>
+                    <div class='content'>
+                        <p>Hola,</p>
+                        <p>¡Gracias por registrarte! Para activar tu cuenta, haz click en el siguiente enlace:</p>
+                        <p><a href='http://asbay.dawprojectes.sapalomera.cat/gleam/Controlador/activacion.php?token=$activation_token' class='btn'>Activar cuenta</a></p>
+                        <p>Si no puedes hacer click en el enlace, copia y pega la siguiente URL en tu navegador:</p>
+                        <p>http://asbay.dawprojectes.sapalomera.cat/gleam/Controlador/activacion.php?token=$activation_token</p>
+                        <p>¡Gracias!</p>
+                    </div>
+                </div>
+            </body>
+        </html>";
+        $mail->AltBody = "Hola,\n\n¡Gracias por registrarte! Para activar tu cuenta, visita el siguiente enlace:\n\nhttp://asbay.dawprojectes.sapalomera.cat/gleam/Controlador/activacion.php?token=$activation_token\n\nSi no puedes acceder al enlace, copia y pega la URL en tu navegador.\n\n¡Gracias!";
         $mail->send();
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";

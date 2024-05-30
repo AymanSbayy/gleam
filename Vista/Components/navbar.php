@@ -38,7 +38,7 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
             <!-- Primera sección: Icono de la página -->
             <div class="col-md-4">
                 <a class="navbar-brand mt-2 mt-lg-0" href="../index.php">
-                    <img src="../public/images/logo_privisional.png" height="40" alt="MDB Logo" loading="lazy" />
+                    <img src="https://i.imgur.com/D4PI3iN.png" width="15%" alt="GLEAM Logo"/>
                 </a>
             </div>
 
@@ -63,10 +63,10 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="sobre_nosotros.php">SOBRE NOSOTROS</a>
+                            <a class="nav-link" href="inprocess.php">SOBRE NOSOTROS</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="info.php">INFO</a>
+                            <a class="nav-link" href="inprocess.php">INFO</a>
                         </li>
                     </ul>
                 </div>
@@ -92,7 +92,7 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
                             <div class="sub-menu">
                                 <div class="uer-info">
                                     <img src="<?php echo $info['foto']; ?>" alt="Foto de perfil">
-                                    <h2>Ayman Sbay</h2>
+                                    <h2><?php echo $info['nombre']; ?></h2>
                                 </div>
                                 <hr>
                                 <?php if (isAdmin($usuario)) { ?>
@@ -116,7 +116,7 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
 
                                 <hr>
 
-                                <a href="logout.php" class="sub-menu-link">
+                                <a href="logout.php" class="sub-menu-link" onclick="return confirm('Estás seguro de que quieres cerrar sesión?')">
                                     <img src="../public/svg/login.svg">
                                     <p>Cerrar sesión</p>
                                     <span>></span>
@@ -226,7 +226,7 @@ $_COOKIE['page'] = $_SERVER['REQUEST_URI'];
                         <input type="password" class="form-control" id="passwordreg" name="passwordreg" required>
                     </div>
                     <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary btn-lg" id="register">Registrarse</button>
+                        <button type="button" style="background-color:#21164e;" class="btn btn-primary btn-lg" id="register">Registrarse</button>
                     </div>
                     <hr>
                     <p class="text-center">¿Ya tienes cuenta?<a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Inicia sesión</a></p>

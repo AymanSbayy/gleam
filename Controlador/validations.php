@@ -3,6 +3,9 @@
 function userIsBlocked($email) {
     require_once("../Model/consultas_usuarios.php");
     $user = getUserByEmail($email);
+    if ($user['bloqueado'] == null) {
+        return 0;
+    }
     return $user['bloqueado'];
 }
 
@@ -38,7 +41,6 @@ function validateEmail($email) {
     } else if (emailExists($email)) {
         return "El correo electrónico ya está en uso";
     }
-    
 }
 
 // Validate password
@@ -50,8 +52,8 @@ function validatePassword($password) {
         return "La contraseña debe tener al menos 8 caracteres";
     } else if (strlen($password) > 100) {
         return "La contraseña no puede tener más de 100 caracteres";
-    } else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $password)) {
-        return "La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número";
+    } else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[a-zA-Z\d@$!%*?&.]{8,}$/", $password)) {
+        return "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un símbolo";
     }
 }
 

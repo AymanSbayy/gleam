@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+require_once("../config.php");
+
+
 $productos = "";
 $productos_por_pagina = 8;
 require_once("../Model/consultas_productos.php");

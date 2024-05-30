@@ -1,14 +1,14 @@
 /* Carrusel */
 @font-face {
-  font-family: 'Apercu';
-  src: url('/fonts/Apercu-Regular.woff2') format('woff2'),
-       url('/fonts/Apercu-Regular.woff') format('woff');
+  font-family: "Apercu";
+  src: url("/fonts/Apercu-Regular.woff2") format("woff2"),
+    url("/fonts/Apercu-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 body {
-  font-family: 'Apercu', sans-serif;
+  font-family: "Apercu", sans-serif;
 }
 
 .hrr {
@@ -447,7 +447,6 @@ ul {
   border-radius: 50%;
 }
 
-
 .list_img {
   width: 20px;
   height: 20px;
@@ -520,7 +519,7 @@ ul {
   color: #21164e;
 }
 
-.sub-menu-wrap{
+.sub-menu-wrap {
   z-index: 1000;
   position: absolute;
   top: 90%;
@@ -531,12 +530,16 @@ ul {
   transition: max-height 0.5s;
 }
 
-.sub-menu-wrap.open-menu{
+.sub-menu-wrap.open-menu {
   max-height: 400px;
 }
 
 .sub-menu {
-  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgb(185, 183, 183) 100%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgb(185, 183, 183) 100%
+  );
   padding: 20px;
   margin: 10px;
 }
@@ -565,7 +568,7 @@ ul {
   margin: 15px 0 10px;
 }
 
-.sub-menu-link{
+.sub-menu-link {
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -595,7 +598,7 @@ ul {
   transform: translate(5px);
 }
 
-.sub-menu-link:hover p{
+.sub-menu-link:hover p {
   font-weight: 600;
 }
 
@@ -611,7 +614,7 @@ ul {
   width: 100% !important;
   overflow: auto !important;
   transform: translateX(100%) !important;
-  transition: transform .6s ease-out !important;
+  transition: transform 0.6s ease-out !important;
 }
 .modal.show .modal-dialog-slide-out {
   transform: translateX(0) !important;
@@ -676,7 +679,6 @@ ul {
   color: #8b84a5;
 }
 
-
 .cart-icon-container {
   position: relative;
 }
@@ -700,7 +702,6 @@ ul {
   width: 30%;
   padding: 0 32px 0 40px;
   overflow: auto;
-
 }
 
 .profile-menu ul {
@@ -729,18 +730,18 @@ ul {
 }
 
 .change_psswd {
-  font-size: .8rem;
+  font-size: 0.8rem;
   text-decoration: underline;
   cursor: pointer;
 }
 
 .content h4 {
-  font-size: .9rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
 }
 
 .pencil-icon {
-  font-size: .8rem;
+  font-size: 0.8rem;
   color: #21164e;
   cursor: pointer;
 }
@@ -803,7 +804,7 @@ ul {
   width: 300px;
   margin: 20px 0 20px 0;
   transition: all 0.3s ease;
-  margin-right: 20px; 
+  margin-right: 20px;
   margin-bottom: 20px;
 }
 
@@ -843,11 +844,11 @@ ul {
   flex-wrap: wrap;
 }
 
-.checkout{
+.checkout {
   background-color: #ebe9e9b3;
 }
 
-.fondo_blanco{
+.fondo_blanco {
   padding: 40px 40px 20px 40px !important;
   background-color: #fff;
 }
@@ -867,7 +868,17 @@ ul {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
-.custom-select.selected {
+.custom-select.selected-facturacion {
+  border-color: #082340;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+}
+
+.custom-select.selected-envio {
+  border-color: #082340;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+}
+
+.payment-card.selected .payment-logo {
   border-color: #082340;
   box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
 }
@@ -875,7 +886,6 @@ ul {
 .maxwidth {
   width: 100% !important;
 }
-
 
 .perfil-card2 {
   position: relative;
@@ -908,4 +918,41 @@ ul {
 .perfil-card2:hover .overlay {
   opacity: 1;
   transform: translateY(0);
+}
+.payment-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.payment-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.payment-logo {
+  max-width: 120px;
+  max-height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+.payment-card:hover .overlay2 {
+  opacity: 2;
+}
+
+.overlay2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(213, 179, 179, 0.5);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+
 }
