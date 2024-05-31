@@ -11,12 +11,16 @@ foreach ($productos as $producto) {
     $productosVendidos[] = $producto;
 }
 $compras = getCompras();
+
 foreach ($compras as $compra) {
-    foreach ($compra['productos'] as $producto) {
-        var_dump($producto);
-        foreach ($productosVendidos as $key => $productoVendido) {
-            if ($productoVendido['id'] == $producto['id']) {
-                $productosVendidos[$key]['vecesVendido'] += $producto['cantidad'];
+    
+    $productosComprados = json_decode($compra['producto'], true);
+    if (is_array($productosComprados)) {
+        foreach ($productosComprados as $productoComprado) {
+            foreach ($productosVendidos as $key => $producto) {
+                if ($producto['codigo_barras'] == $productoComprado['codigo_barras']) {
+                    $productosVendidos[$key]['vecesVendido'] += $productoComprado['cantidad'];
+                }
             }
         }
     }

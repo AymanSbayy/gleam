@@ -74,6 +74,9 @@ if (isLoggedIn()) {
                     $currentYear = intval(date('y'));
                     $currentMonth = intval(date('m'));
 
+                    $matches = [];
+                    preg_match('/^([0-9]{2})\/([0-9]{2})$/', $payingData['expiry'], $matches);
+
                     $expiryMonth = intval($matches[1]);
                     $expiryYear = intval($matches[2]);
 
@@ -81,6 +84,8 @@ if (isLoggedIn()) {
                         echo json_encode(['status' => 'error', 'message' => 'La tarjeta de crédito ha expirado']);
                         return;
                     }
+
+                    $payingData['number'] = str_replace(' ', '', $payingData['number']);
 
                     if (!preg_match('/^[0-9]{16}$/', $payingData['number'])) {
                         echo json_encode(['status' => 'error', 'message' => 'El número de tarjeta de crédito no es válido']);
@@ -159,12 +164,14 @@ if (isLoggedIn()) {
             }
             $iva = $ivaProducto;
             $total = number_format($subtotal + $iva - $totalDescuento, 2);
+
+            $total = floatval($total);
         }
         registrarPedido($user['idUsuario'], $direccion, $facturacion, $total, $payingMethod);
         setcookie('carrito', '', time() - 3600, '/');
         $pdfPath = generateInvoicePDF($user, $productos, $subtotal, $iva, $total, $totalDescuento);
         sendEmail($user['email'], $productos, $subtotal, $iva, $total, $totalDescuento, $pdfPath);
-        $_COOKIE['mensaje'] = true;
+        setcookie('mensaje', true, time() + 1, '/');
         echo json_encode(['status' => 'success', 'message' => 'Pedido realizado correctamente']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'No se ha enviado el formulario correctamente. Por favor, inténtelo de nuevo.']);
@@ -177,74 +184,79 @@ if (isLoggedIn()) {
 
 function generateInvoicePDF($user, $productos, $subtotal, $iva, $total, $totalDescuento)
 {
-    $pdf = new TCPDF();
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+    // Configuración de la página
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('Gleam');
+    $pdf->SetTitle('Factura');
+    $pdf->SetSubject('Factura de compra');
+    $pdf->SetKeywords('TCPDF, PDF, factura, test, guide');
+
+    // Configuración de los márgenes
+    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+    // Configuración del encabezado y pie de página
+    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+    // Configuración de la fuente
+    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+    // Configuración de las imágenes
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    // Configuración de la relación de aspecto de las imágenes
+    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+    // Añadir una página
     $pdf->AddPage();
 
-    // Encabezado de la factura
-    $pdf->SetFont('helvetica', 'B', 20);
-    $pdf->Cell(0, 10, 'Factura', 0, 1, 'C');
-    $pdf->SetFont('helvetica', '', 12);
-    $pdf->Cell(0, 10, 'Fecha: ' . date('d-m-Y'), 0, 1, 'R');
+    // Contenido de la factura
+    $html = '<h1>Factura</h1>
+             <h2>Fecha: ' . date('d-m-Y') . '</h2>
+             <h3>Empresa: Gleam</h3>
+             <p>Dirección: 123 Calle Principal, Ciudad</p>
+             <p>Teléfono: +1234567890</p>
+             <p>Email: info@gleam.com</p>
+             <h3>Cliente: ' . $user['nombre'] . '</h3>
+             <p>Email: ' . $user['email'] . '</p>';
 
-    // Información de la empresa
-    $pdf->SetFont('helvetica', 'B', 12);
-    $pdf->Cell(0, 10, 'Empresa: Gleam', 0, 1, 'L');
-    $pdf->Cell(0, 10, 'Dirección: 123 Calle Principal, Ciudad', 0, 1, 'L');
-    $pdf->Cell(0, 10, 'Teléfono: +1234567890', 0, 1, 'L');
-    $pdf->Cell(0, 10, 'Email: info@gleam.com', 0, 1, 'L');
-    $pdf->Ln(10);
-
-    // Información del cliente
-    $pdf->SetFont('helvetica', 'B', 12);
-    $pdf->Cell(0, 10, 'Cliente: ' . $user['nombre'], 0, 1, 'L');
-    $pdf->Cell(0, 10, 'Email: ' . $user['email'], 0, 1, 'L');
-    
     // Tabla de productos
-    $pdf->Ln(10);
-    $pdf->SetFont('helvetica', 'B', 12);
-    $pdf->Cell(40, 10, 'Producto', 1, 0, 'C');
-    $pdf->Cell(30, 10, 'Cantidad', 1, 0, 'C');
-    $pdf->Cell(40, 10, 'Precio unitario', 1, 0, 'C');
-    $pdf->Cell(40, 10, 'Total', 1, 0, 'C');
-    $pdf->Ln(10);
-    $pdf->SetFont('helvetica', '', 12);
+    $html .= '<table border="1" cellpadding="5">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Imagen</th>
+                        <th>Cantidad</th>
+                        <th>Precio unitario</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>';
 
     foreach ($productos as $producto) {
-        $pdf->Cell(40, 10, $producto['nombre'], 1, 0, 'C');
-        $pdf->Cell(30, 10, $producto['cantidad'], 1, 0, 'C');
-        $pdf->Cell(40, 10, $producto['precio'] . ' €', 1, 0, 'C');
-        $pdf->Cell(40, 10, ($producto['precio'] * $producto['cantidad']) . ' €', 1, 0, 'C');
-        $pdf->Ln(10);
+        $html .= '<tr>
+                    <td>' . $producto['nombre'] . '</td>
+                    <td><img src="' . $producto['imagen'] . '" height="50" width="50"></td>
+                    <td>' . $producto['cantidad'] . '</td>
+                    <td>' . $producto['precio'] . ' €</td>
+                    <td>' . ($producto['precio'] * $producto['cantidad']) . ' €</td>
+                  </tr>';
     }
 
-    // Resumen de precios
-    $pdf->Ln(10);
-    $pdf->Cell(0, 10, 'Subtotal:', 0, 0, 'R');
-    $pdf->Cell(0, 10, $subtotal . ' €', 0, 1, 'R');
-    $pdf->Cell(0, 10, 'IVA:', 0, 0, 'R');
-    $pdf->Cell(0, 10, $iva . ' €', 0, 1, 'R');
-    $pdf->Cell(0, 10, 'Descuento:', 0, 0, 'R');
-    $pdf->Cell(0, 10, $totalDescuento . ' €', 0, 1, 'R');
-    $pdf->SetFont('helvetica', 'B', 12);
-    $pdf->Cell(0, 10, 'Total:', 0, 0, 'R');
-    $pdf->Cell(0, 10, $total . ' €', 0, 1, 'R');
+    $html .= '</tbody></table>';
 
-    // Estilos y diseño de la factura
-    $pdf->SetFillColor(230, 230, 230);
-    $pdf->SetTextColor(0, 0, 0);
-    $pdf->SetDrawColor(0, 0, 0);
-    $pdf->SetLineWidth(0.2);
-    $pdf->SetFont('helvetica', 'B', 14);
-    $pdf->SetMargins(20, 20, 20);
-    $pdf->SetAutoPageBreak(true, 20);
-    $pdf->SetHeaderMargin(10);
-    $pdf->SetFooterMargin(10);
-    $pdf->SetHeaderData('', '', 'Factura', 'Fecha: ' . date('d-m-Y'));
-    $pdf->setHeaderFont(Array('helvetica', 'B', 12));
-    $pdf->setFooterFont(Array('helvetica', 'B', 12));
-    $pdf->setPrintHeader(true);
-    $pdf->setPrintFooter(true);
-    $pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
+    // Resumen de precios
+    $html .= '<p>Subtotal: ' . $subtotal . ' €</p>
+              <p>IVA: ' . $iva . ' €</p>
+              <p>Descuento: ' . $totalDescuento . ' €</p>
+              <h2>Total: ' . $total . ' €</h2>';
+
+    // Escribir el HTML en el PDF
+    $pdf->writeHTML($html, true, false, true, false, '');
 
     // Output del PDF y retorno del nombre del archivo
     $pdfFileName = tempnam(sys_get_temp_dir(), 'factura_') . '.pdf';

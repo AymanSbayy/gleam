@@ -73,6 +73,41 @@ foreach ($compras as $compra) {
 $gananciasMensuales = $ventasMensuales - $comprasMensuales;
 $gananciasSemanales = $ventasSemanales - $comprasSemanales;
 
+//Estadísticas semanales
+$comprasSemanales = 0;
+$ventasSemanales = 0;
+$gananciasSemanales = 0;
+$ventasSemanales = 0;
+$countCompras = 0;
+$countVentas = 0;
+$gananciasSemanales = 0;
+
+$fechaActual = new DateTime();
+
+foreach ($compras as $compra) {
+    $fecha = new DateTime($compra['fecha']);
+    $hora = new DateTime($compra['hora']);
+    $diferencia = $fechaActual->diff($fecha);
+    if ($diferencia->d <= 7) {
+        $comprasSemanales += $compra['total'];
+        $countCompras++;
+    }
+}
+
+foreach ($productosVendidos as $producto) {
+    $fecha = new DateTime($producto['fecha']);
+    $hora = new DateTime($producto['hora']);
+    $diferencia = $fechaActual->diff($fecha);
+    if ($diferencia->d <= 7) {
+        $ventasSemanales += $producto['total'];
+        $countVentas++;
+    }
+}
+
+$gananciasSemanales = $ventasSemanales - $comprasSemanales;
+
+//Estadísticas diarias
+
 $comprasDiarias = 0;
 $ventasDiarias = 0;
 $gananciasDiarias = 0;
@@ -81,12 +116,12 @@ $countCompras = 0;
 $countVentas = 0;
 $gananciasDiarias = 0;
 
+$fechaActual = new DateTime();
+
 foreach ($compras as $compra) {
     $fecha = new DateTime($compra['fecha']);
     $hora = new DateTime($compra['hora']);
-    $fechaActual = new DateTime();
-    $diferencia = $fechaActual->diff($fecha);
-    if ($diferencia->d == 0 && $fecha->format('Y-m-d') === $fechaActual->format('Y-m-d')) {
+    if ($fecha->format('Y-m-d') === $fechaActual->format('Y-m-d')) {
         $comprasDiarias += $compra['total'];
         $countCompras++;
     }
@@ -95,9 +130,7 @@ foreach ($compras as $compra) {
 foreach ($productosVendidos as $producto) {
     $fecha = new DateTime($producto['fecha']);
     $hora = new DateTime($producto['hora']);
-    $fechaActual = new DateTime();
-    $diferencia = $fechaActual->diff($fecha);
-    if ($diferencia->d == 0 && $fecha->format('Y-m-d') === $fechaActual->format('Y-m-d')) {
+    if ($fecha->format('Y-m-d') === $fechaActual->format('Y-m-d')) {
         $ventasDiarias += $producto['total'];
         $countVentas++;
     }
@@ -108,13 +141,8 @@ $productosVendidosDiarios = array();
 foreach ($productosVendidos as $producto) {
     $fecha = new DateTime($producto['fecha']);
     $hora = new DateTime($producto['hora']);
-    $fechaActual = new DateTime();
-    $diferencia = $fechaActual->diff($fecha);
-    if ($diferencia->d == 0) {
-        // Check if the sale was made today
-        if ($fecha->format('Y-m-d') === $fechaActual->format('Y-m-d')) {
-            $productosVendidosDiarios[] = $producto;
-        }
+    if ($fecha->format('Y-m-d') === $fechaActual->format('Y-m-d')) {
+        $productosVendidosDiarios[] = $producto;
     }
 }
 
@@ -124,13 +152,17 @@ $ventasHora = array_fill(0, 24, 0);
 foreach ($compras as $compra) {
     $fecha = new DateTime($compra['fecha'] . ' ' . $compra['hora']);
     $hora = $fecha->format('H');
-    $comprasHora[(int)$hora]++;
+    if ($fecha->format('Y-m-d') === $fechaActual->format('Y-m-d')) {
+        $comprasHora[(int)$hora]++;
+    }
 }
 
 foreach ($productosVendidos as $producto) {
     $fecha = new DateTime($producto['fecha'] . ' ' . $producto['hora']);
     $hora = $fecha->format('H');
-    $ventasHora[(int)$hora]++;
+    if ($fecha->format('Y-m-d') === $fechaActual->format('Y-m-d')) {
+        $ventasHora[(int)$hora]++;
+    }
 }
 
 $gananciasDiarias = $ventasDiarias - $comprasDiarias;

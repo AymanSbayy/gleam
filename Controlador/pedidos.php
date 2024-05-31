@@ -8,6 +8,11 @@ if (isLoggedIn()) {
     $usuario = $_SESSION['usuario'];
     $perfil_usuario = getUserByEmail($usuario);
 
+    if ($_COOKIE['mensaje'] = true && isset($_COOKIE['mensaje'])) {
+        $mensaje = true;
+    }
+    setcookie('mensaje', false, time() + 1, '/');
+
     $productos_pedidos = getProductosPedidos($perfil_usuario['idUsuario']);
 
     foreach ($productos_pedidos as $producto) {

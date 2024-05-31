@@ -42,7 +42,7 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active d-item">
-                    <img src="https://www.elconfidencialdigital.com/asset/zoomcrop,1280,720,center,center/media/elconfidencialdigital/images/2018/05/30/ECDIMA20180530_0005_1.jpg" class="d-block w-100 d-img" alt="Slide 1">
+                    <img src="../public/images/hogar_banner.jpg" class="d-block w-100 d-img" alt="Slide 1">
                     <div class="carousel-caption d-none d-md-block d-caption text-start">
                         <h1 class="display-5 fw-bolder text-capitalize">Hogar y Jardinería</h1>
                         <p class="mt-3 fs-3 text-uppercase">Transforma tu hogar y jardín en un oasis de confort y belleza</p>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="carousel-item d-item">
-                    <img src="https://i.blogs.es/9c77f4/redd-f-3mwxknqet3e-unsplash/1366_2000.jpeg" class="d-block w-100 d-img" alt="Slide 2">
+                    <img src="../public/images/electro_banner.jpg" class="d-block w-100 d-img" alt="Slide 2">
                     <div class="carousel-caption d-none d-md-block d-caption text-start">
                         <h1 class="display-5 fw-bolder text-capitalize">Electrodomésticos</h1>
                         <p class="mt-3 fs-3 text-uppercase">Descubre la tecnología que simplifica tu vida diaria en casa</p>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="carousel-item d-item">
-                    <img src="https://t3.ftcdn.net/jpg/05/15/41/90/360_F_515419034_pbFpjmwb36PxEQRkBdcOMlTFWJ1zfIAH.jpg" class="d-block w-100 d-img" alt="Slide 3">
+                    <img src="../public/images/deportes_banner.jpg" class="d-block w-100 d-img" alt="Slide 3">
                     <div class="carousel-caption d-none d-md-block d-caption text-start">
                         <h1 class="display-5 fw-bolder text-capitalize">Deportes</h1>
                         <p class="mt-3 fs-3 text-uppercase">Eleva tu rendimiento y alcanza tus metas deportivas con equipamiento de calidad</p>

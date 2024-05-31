@@ -191,7 +191,7 @@ $(document).ready(function () {
             type: "success",
             delay: 2000,
           });
-          window.location.href = "perfil.php";
+          window.location.href = "pedidos.php";
         } else {
           $.bootstrapGrowl(response.message, {
             type: "danger",

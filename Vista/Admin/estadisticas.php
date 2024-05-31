@@ -110,7 +110,83 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="card mt-3" style="padding:35px;">
-                                            <h4 class="card-title text-center">Resumen semanal</h4>
+                                            <h4 class="card-title text-center">Resumen Semanal</h4>
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="lni lni-cart-full text-danger display-6"></i>
+                                                        <div class="ms-3">
+                                                            <h5 class="mb-0">Compras totales</h5>
+                                                            <span class="text-danger"><?php echo number_format($comprasSemanales, 2); ?>€</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="lni lni-coin text-success display-6"></i>
+                                                        <div class="ms-3">
+                                                            <h5 class="mb-0">Ventas totales</h5>
+                                                            <span class="text-success"><?php echo number_format($ventasSemanales, 2); ?>€</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="lni lni-money-protection text-primary display-6"></i>
+                                                        <div class="ms-3">
+                                                            <h5 class="mb-0">Ganancias totales</h5>
+                                                            <span class="text-primary"><?php echo number_format($gananciasSemanales, 2); ?>€</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="card mt-3">
+                                            <div class="card-body">
+                                                <canvas id="gananciasTotales_semanales" style="max-height: 300px;"></canvas>
+                                                <p class="mt-3">Ganancias esperadas: <span id="gananciasSemanal_esperadas" class="badge bg-dark text-white">5000€</span></p>
+                                                <p class="mt-3">Ganancias totales: <span id="gananciasSemanal_totales" class="badge <?php echo ($gananciasSemanales >= 5000) ? 'bg-success' : 'bg-danger'; ?> text-white"><?php echo number_format($gananciasSemanales, 2); ?>€</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12">
+                                        <div class="card mt-3" style="height: 430px;">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Compras</h4>
+                                                <div class="row">
+                                                    <canvas id="comprasSemanal" style="max-height: 300px;"></canvas>
+                                                    <p class="mt-3">Se han realizado un total de <span id="comprasSemanal_totales" class="badge bg-dark text-white"><?php echo count($compras); ?></span> compras esta semana.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12">
+                                        <div class="card mt-3" style="height: 430px;">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Ventas</h4>
+                                                <div class="row">
+                                                    <canvas id="ventasSemanal" style="max-height: 300px;"></canvas>
+                                                    <p class="mt-3">Se han realizado un total de <span id="ventasSemanal_totales" class="badge bg-dark text-white"><?php echo count($productosVendidosSemanal); ?></span> ventas esta semana.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row tabcontent" id="mensual" style="display:none;">
+                        <div class="col-12">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="card mt-3" style="padding:35px;">
+                                            <h4 class="card-title text-center">Resumen Mensual</h4>
                                             <div class="row mt-3">
                                                 <div class="col-md-6">
                                                     <div class="d-flex align-items-center">
@@ -340,6 +416,153 @@
                         'rgba(75, 192, 192, 1)',
                         'rgba(153, 102, 255, 1)',
                         'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctx = document.getElementById('comprasSemanal').getContext('2d');
+        var comprasSemanal = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    <?php
+                    $dias = array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+                    for ($i = 0; $i < 7; $i++) {
+                        echo '"' . $dias[$i] . '",';
+                    }
+                    ?>
+                ],
+                datasets: [{
+                    label: 'Compras semanales',
+                    data: [
+                        <?php
+                        for ($i = 0; $i < 7; $i++) {
+                            $comprasDia = 0;
+                            foreach ($compras as $compra) {
+                                $fecha = new DateTime($compra['fecha']);
+                                if ($fecha->format('w') == $i) {
+                                    $comprasDia += $compra['total'];
+                                }
+                            }
+                            echo $comprasDia . ',';
+                        }
+                        ?>
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctx = document.getElementById('ventasSemanal').getContext('2d');
+        var ventasSemanal = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    <?php
+                    $dias = array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+                    for ($i = 0; $i < 7; $i++) {
+                        echo '"' . $dias[$i] . '",';
+                    }
+                    ?>
+                ],
+                datasets: [{
+                    label: 'Ventas semanales',
+                    data: [
+                        <?php
+                        for ($i = 0; $i < 7; $i++) {
+                            $ventasDia = 0;
+                            foreach ($productosVendidos as $producto) {
+                                $fecha = new DateTime($producto['fecha']);
+                                if ($fecha->format('w') == $i) {
+                                    $ventasDia += $producto['total'];
+                                }
+                            }
+                            echo $ventasDia . ',';
+                        }
+                        ?>
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctx = document.getElementById('gananciasTotales_semanales').getContext('2d');
+        var gananciasTotales_semanales = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ganancias totales', 'Ganancias esperadas'],
+                datasets: [{
+                    label: 'Ganancias totales',
+                    data: [
+                        <?php echo $gananciasSemanales; ?>,
+                        5000
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)'
                     ],
                     borderWidth: 1
                 }]

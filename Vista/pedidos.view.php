@@ -35,13 +35,14 @@
 <body>
 
     <?php include("Components/navbar.php"); ?>
-
-    <?php if (isset($mensaje) && $mensaje) { ?>
+    <?php require_once("../Middleware/LoggedIn.php"); ?>
+    <?php if (isset($mensaje) && $mensaje) {
+        ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>¡Pedido realizado correctamente!</strong> Se ha enviado un correo electrónico con la información y la factura en formato PDF.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    <?php } ?>
+    <?php }  ?>
 
     <div class="profile-menu">
         <p style="font-size: 1. 25rem;" class="mt-5"><strong>Hola</strong></p>
