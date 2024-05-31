@@ -56,7 +56,10 @@ Para hacer el login de usuarios, verificamos que el usuario existe en la base de
 
 Para el login social con Google, directamente se hace una petición a Google con el token que nos devuelve el login de Google y nos devuelve los datos del usuario. Si el usuario ya existe en la base de datos, se crea una sesión y se redirige a la página principal. Si el usuario no existe, se crea un usuario con los datos que nos devuelve Google y se crea una sesión. Esto se hace en los ficheros dentro de la carpeta `oAuth`, que son los encargados de hacer la autenticación con Google, uno para recojer los datos y otro para hacer la autenticación.
 
+A nivel de acceso, se ha hecho un control de acceso a las páginas, para que si un usuario no está logueado, no pueda acceder a ciertas páginas. Para ello, se ha creado un middleware que se encarga de comprobar si el usuario está logueado y si no lo está, se redirige a la página de login. Este middleware se ha aplicado a las páginas de perfil, pedidos y cerrar sesión.
 
+
+- Navegación Intuitiva
 
 
 

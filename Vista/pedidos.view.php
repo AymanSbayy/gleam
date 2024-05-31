@@ -91,12 +91,18 @@
                             </thead>
                             <tbody>';
                 }
-
+                
                 echo '<tr>
                         <td><img src="' . $producto_info['imagen'] . '" alt="' . $producto_info['nombre'] . '" class="img-thumbnail" style="width: 100px;"></td>
-                        <td>' . $producto_info['nombre'] . '</td>
-                        <td>' . $producto_info['precio'] . '€</td>
-                        <td>' . $producto['cantidad'] . '</td>
+                        <td>' . $producto_info['nombre'] . '</td>';
+                        
+                if ($producto_info['descuento'] > 0) {
+                    echo '<td style="color:red;">' . number_format($producto['total'] - ($producto['total'] * $producto_info['descuento'] / 100), 2) . '€</td>';
+                } else {
+                    echo '<td>' . number_format($producto['total'], 2) . '€</td>';
+                }
+                        
+                echo '<td>' . $producto['cantidad'] . '</td>
                         <td>';
 
                 if ($producto['llegaEl'] > date('Y-m-d')) {
@@ -108,7 +114,7 @@
                     echo '<span class="badge badge-success">Su pedido ha llegado</span>';
                 }
 
-                echo '</td></tr>';
+                echo '</?></tr>';
             }
 
             if ($current_date != null) {

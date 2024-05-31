@@ -264,7 +264,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else if (isset($_POST['accion']) && $_POST['accion'] === 'info_producto') {
         $id = $_POST['id'];
         $productos = getProductoByCodigoBarras($id);
-        $categoria = getCategoriaById($productos['idCategoria']);
+        if (!empty($productos)) {
+            $categoria = getCategoriaById($productos['idCategoria']);
+        } else {
+            echo json_encode("Error: No se encontró el producto.");
+            return;
+        }
         $subcategoria = getSubcategoriaById($productos['idSubcategoria']);
         $categorias = getCategorias();
         $subcategorias = getSubcategorias();
