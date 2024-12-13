@@ -1,7 +1,7 @@
 <?php
-require_once(__DIR__ . "/../config.php");
+require_once("../config.php");
 
-require_once(__DIR__ . "/../Middleware/LoggedIn.php");
+require_once("../Middleware/LoggedIn.php");
 require_once(__DIR__ . "/../Model/consultas_productos.php");
 
 $productos = getAllProducts();

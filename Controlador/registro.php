@@ -104,15 +104,15 @@ function sendEmail($email, $activation_token)
                     <div class='content'>
                         <p>Hola,</p>
                         <p>¡Gracias por registrarte! Para activar tu cuenta, haz click en el siguiente enlace:</p>
-                        <p><a href='http://asbay.dawprojectes.sapalomera.cat/gleam/Controlador/activacion.php?token=$activation_token' class='btn'>Activar cuenta</a></p>
+                        <p><a href='localhost/gleam/Controlador/activacion.php?token=$activation_token' class='btn'>Activar cuenta</a></p>
                         <p>Si no puedes hacer click en el enlace, copia y pega la siguiente URL en tu navegador:</p>
-                        <p>http://asbay.dawprojectes.sapalomera.cat/gleam/Controlador/activacion.php?token=$activation_token</p>
+                        <p>localhost/gleam/Controlador/activacion.php?token=$activation_token</p>
                         <p>¡Gracias!</p>
                     </div>
                 </div>
             </body>
         </html>";
-        $mail->AltBody = "Hola,\n\n¡Gracias por registrarte! Para activar tu cuenta, visita el siguiente enlace:\n\nhttp://asbay.dawprojectes.sapalomera.cat/gleam/Controlador/activacion.php?token=$activation_token\n\nSi no puedes acceder al enlace, copia y pega la URL en tu navegador.\n\n¡Gracias!";
+        $mail->AltBody = "Hola,\n\n¡Gracias por registrarte! Para activar tu cuenta, visita el siguiente enlace:\n\nlocalhost/gleam/Controlador/activacion.php?token=$activation_token\n\nSi no puedes acceder al enlace, copia y pega la URL en tu navegador.\n\n¡Gracias!";
         $mail->send();
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
