@@ -2,7 +2,7 @@
 require_once("../config.php");
 
 require_once("../Middleware/LoggedIn.php");
-require_once(__DIR__ . "/../Model/consultas_productos.php");
+require_once("../Model/consultas_productos.php");
 
 $productos = getAllProducts();
 $productosVendidos = array();
@@ -30,4 +30,4 @@ usort($productosVendidos, function ($a, $b) {
 });
 $productosVendidos = array_slice($productosVendidos, 0, 10);
 
-include(__DIR__ . "/../Vista/welcome.view.php");
+include("../Vista/welcome.view.php");
