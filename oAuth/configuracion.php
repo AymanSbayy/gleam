@@ -6,7 +6,7 @@ require_once("../Middleware/LoggedIn.php");
 
 $client_id = "104014291509-d17dlm3rd8e6shgvarenv72dn371nv00.apps.googleusercontent.com";
 $client_secret = "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";
-$redirect_uri = "localhost/gleam/Controlador/welcome.php";
+$redirect_uri = "https://slateblue-cat-348405.hostingersite.com/Controlador/welcome.php";
 
 $client = new Google_Client();
 $client->setClientId($client_id);
