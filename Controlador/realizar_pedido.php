@@ -273,7 +273,7 @@ function sendEmail($email, $productos, $subtotal, $iva, $total, $totalDescuento,
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'a.sbay@sapalomera.cat';
-        $mail->Password = 'awdj gqpo zdfb krpo';
+        $mail->Password = 'ukjw hkmf ucio virs';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
         $mail->setFrom('a.sbay@sapalomera.cat', 'Gleam');
