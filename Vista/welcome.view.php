@@ -170,7 +170,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 no-padding-col card2">
-                    <img src="https://lyadesign.es/cdn/shop/products/Diseo-de-lmpara-de-suspensin-vidrio-triturado-7-lmparas-0_1200x.jpg?v=1669061044" class="card-img2" alt="...">
+                    <img src="https://cdn.pixabay.com/photo/2016/11/22/19/11/brick-wall-1850095_1280.jpg" class="card-img2" alt="...">
                     <div class="card-body">
                         <h5 class="card-title2">Lamparas</h5>
                         <p class="card-text2">Descubre las mejores bicicletas y accesorios para disfrutar de tus rutas favoritas</p>
