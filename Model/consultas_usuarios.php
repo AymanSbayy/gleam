@@ -174,9 +174,14 @@ function getUsers() {
 
 function deleteUser($idUsuario) {
     $conn = connexion();
-    $sql = "DELETE FROM usuarios WHERE idUsuario = $idUsuario";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
+
+    $sqlPedidos = "DELETE FROM pedidos WHERE idUsuario = ?";
+    $stmtPedidos = $conn->prepare($sqlPedidos);
+    $stmtPedidos->execute([$idUsuario]);
+
+    $sqlUsuario = "DELETE FROM usuarios WHERE idUsuario = ?";
+    $stmtUsuario = $conn->prepare($sqlUsuario);
+    $stmtUsuario->execute([$idUsuario]);
 }
 
 function bloquearUser($idUsuario) {
