@@ -49,14 +49,13 @@ if (isLoggedIn() == false) {
 function sendEmail($email, $activation_token)
 {
     $mail = new PHPMailer(true);
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-    $mail->Debugoutput = 'html';
+
     try {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'a.sbay@sapalomera.cat';
-        $mail->Password = 'awdj gqpo zdfb krpo';
+        $mail->Password = 'ukjw hkmf ucio virs';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
         $mail->setFrom('a.sbay@sapalomera.cat', 'Gleam');
@@ -113,7 +112,7 @@ function sendEmail($email, $activation_token)
                 </div>
             </body>
         </html>";
-        $mail->AltBody = "Hola,\n\n¡Gracias por registrarte! Para activar tu cuenta, visita el siguiente enlace:\nhttps://slateblue-cat-348405.hostingersite.com/Controlador/activacion.php?token=$activation_token\n\nSi no puedes acceder al enlace, copia y pega la URL en tu navegador.\n\n¡Gracias!";
+        $mail->AltBody = "Hola,\n\n¡Gracias por registrarte! Para activar tu cuenta, visita el siguiente enlace:\n\https://slateblue-cat-348405.hostingersite.com/Controlador/activacion.php?token=$activation_token\n\nSi no puedes acceder al enlace, copia y pega la URL en tu navegador.\n\n¡Gracias!";
         $mail->send();
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
